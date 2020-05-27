@@ -1,5 +1,37 @@
 var socket = io();
 
+function promptUser () {
+  let person = null;
+  document.cookie = "";
+  while (person == null && !document.cookie.startsWith("name")) {
+    person = prompt("Please enter your name using only letters and numbers", 'Bakshar Ban Everyone Beccherla');
+    if (person.includes(';')) {
+      person = null;
+    }
+  }
+  addCookie(person);
+}
+
+function addCookie (name) {
+  let user = "name=" + name + "; gameId = -1";
+  document.cookie = user;
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
 var form = document.getElementById("chatForm");
 
 form.addEventListener('submit', function(e) {
@@ -21,7 +53,8 @@ socket.on('message', function(text) {
   }
   var container = document.getElementById('chatBox');
   var newMessage = document.createElement('p');
-  newMessage.innerText = text;
+  var userName = getCookie("name");
+  newMessage.innerText = userName + ": " + text;
   container.appendChild(newMessage);
 
   var seperator = document.createElement('br');

@@ -44,7 +44,7 @@ io.on('connection', function(socket) {
     var rooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
     console.log(rooms[0]);
     io.to(rooms[0]).emit('message', msg);
-    
+
   });
   socket.on('joinGame', function(msg) {
     console.log(msg);
@@ -60,6 +60,3 @@ io.on('connection', function(socket) {
     socket.emit('leaveRoom',0);
   });
 });
-
-
-
