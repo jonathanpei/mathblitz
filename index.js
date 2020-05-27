@@ -51,6 +51,7 @@ io.on('connection', function(socket) {
     io.to(gameNumber+"").emit('playerList', gameList[gameNumber+""]["players"]);
 
     gameNumber++;
+    io.emit('universalPlayerList', playerList);
 
   });
   socket.on('message', function(msg) {
@@ -66,6 +67,7 @@ io.on('connection', function(socket) {
     playerList[socket.id+""] = {name:cookies.name, room:msg+""};
 
     io.to(msg).emit('playerList', gameList[msg+""]["players"]);
+    io.emit('universalPlayerList', playerList);
 
   });
   socket.on('leaveRoom',function(msg){
@@ -87,6 +89,7 @@ io.on('connection', function(socket) {
 
     io.emit('addGames', gameList);
 
+    io.emit('universalPlayerList', playerList);
 
   });
   socket.on('disconnect',function(){

@@ -105,7 +105,7 @@ socket.on('playerList',function(data){
 socket.on('universalPlayerList',function(data){
   $("#universalNames").empty();
   for(var key in data){
-    if(data.hasOwnProperty(key)){
+    if(data.hasOwnProperty(key) && data[key+""].room=="menu"){
       $("#universalNames").append("<p>"+data[key+""].name+"</p>");
     }
   }
