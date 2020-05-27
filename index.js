@@ -31,9 +31,13 @@ io.on('connection', function(socket) {
 
 
   socket.on('newGame', function(msg) {
+
     games.push(gameNumber);
-    gameNumber++;
     io.emit('addGames', games);
+    socket.emit('joinedGame',0);
+    socket.leave("menu");
+    socket.join(gameNumber);
+    gameNumber++;
 
   });
   socket.on('message', function(msg) {
