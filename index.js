@@ -34,7 +34,10 @@ io.on('connection', function(socket) {
     games.push(gameNumber);
     gameNumber++;
     io.emit('addGames', games);
-
+    console.log(msg)
+    socket.emit('joindGame',0);
+    socket.leave9"menu");
+    socket.join(msg);
   });
   socket.on('message', function(msg) {
     var rooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
