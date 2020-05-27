@@ -1,19 +1,23 @@
 var socket = io();
 
+function setCookie(cname,cvalue,exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires=" + d.toGMTString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  console.log(document.cookie);
+}
+
 function promptUser () {
   let person = null;
+  console.log(document.cookie);
   while (person == null && !document.cookie.startsWith("name")) {
     person = prompt("Please enter your name using only letters and numbers", 'Bakshar Ban Everyone Beccherla');
     if (person.includes(';')) {
       person = null;
     }
   }
-  addCookie(person);
-}
-
-function addCookie (name) {
-  let user = "name=" + name + "; gameId = -1";
-  document.cookie = user;
+  setCookie("name",person,30);
 }
 
 function getCookie(cname) {
