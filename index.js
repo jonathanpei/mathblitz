@@ -17,7 +17,7 @@ var io = require('socket.io')(server);
 
 var gameNumber = 1;
 var gameList = {};
-var playerRoomList = {};
+var playerList = {};
 app.get('/login', function (req, res) {
   res.sendFile(__dirname+"/client/index.html");
 })
@@ -29,8 +29,9 @@ io.on('connection', function(socket) {
 
 
   socket.join("menu");
-  playerRoomList[socket.id+""] = "menu";
+  playerList[socket.id+""] = {name:cookies.name, room:"menu"};
 
+  io.emit('universalPlayerList', playerList);
 
   io.emit('addGames', gameList);
 
@@ -44,7 +45,7 @@ io.on('connection', function(socket) {
     socket.emit('joinedGame',0);
     socket.leave("menu");
     socket.join(gameNumber);
-    playerRoomList[socket.id+""] = gameNumber;
+    playerList[socket.id+""] = {name:cookies.name, room:gameNumber+""};
 
     gameList[gameNumber+""]["players"] = [{id:socket.id,name:cookies.name}];
     io.to(gameNumber+"").emit('playerList', gameList[gameNumber+""]["players"]);
@@ -62,16 +63,16 @@ io.on('connection', function(socket) {
     socket.leave("menu");
     socket.join(msg);
     gameList[msg+""]["players"].push({id:socket.id,name:cookies.name});
-    playerRoomList[socket.id+""] = msg;
+    playerList[socket.id+""] = {name:cookies.name, room:msg+""};
 
     io.to(msg).emit('playerList', gameList[msg+""]["players"]);
 
   });
   socket.on('leaveRoom',function(msg){
     var rooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
-    var currentRoom = playerRoomList[socket.id+""];
+    var currentRoom = playerList[socket.id+""].room;
 
-    playerRoomList[socket.id+""] = "menu";
+    playerList[socket.id+""].room = "menu";
     socket.leave(currentRoom);
     socket.join("menu");
 
@@ -87,9 +88,9 @@ io.on('connection', function(socket) {
   });
   socket.on('disconnect',function(){
     console.log("disconnect"+ " "+socket.id);
-    var currentRoom = playerRoomList[socket.id+""];
+    var currentRoom = playerList[socket.id+""].room;
 
-    delete playerRoomList[socket.id+""];
+    delete playerList[socket.id+""];
 
     var rooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
     socket.leave(currentRoom);
@@ -102,6 +103,9 @@ io.on('connection', function(socket) {
       io.emit('addGames', gameList);
 
     }
+
+
+    io.emit('universalPlayerList', playerList);
 
   })
 });

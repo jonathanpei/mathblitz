@@ -102,6 +102,14 @@ socket.on('playerList',function(data){
 
   }
 });
+socket.on('universalPlayerList',function(data){
+  $("#universalNames").empty();
+  for(var key in data){
+    if(data.hasOwnProperty(key)){
+      $("#universalNames").append("<p>"+data[key+""].name+"</p>");
+    }
+  }
+});
 function joinGame(gameNum){
   socket.emit('joinGame',gameNum);
 }
