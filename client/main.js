@@ -19,6 +19,8 @@ function promptUser () {
   let person = null;
   console.log(document.cookie);
   if (getCookie("name") != "") {
+    socket.emit("nameSet","");
+
     putName();
     return;
   }
@@ -34,6 +36,7 @@ function promptUser () {
     }
   }
   setCookie("name",person,30);
+  socket.emit("nameSet","");
   putName();
 }
 

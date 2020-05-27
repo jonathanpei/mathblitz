@@ -1,1 +1,1 @@
-        io.emit('addGames', gameList);
+    console.log("MSDFSDFMSDFLKSDJFKLJSDKLSJDF " + msg);
