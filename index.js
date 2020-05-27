@@ -24,6 +24,8 @@ function addGames(socket){
 }
 
 io.on('connection', function(socket) {
+  socket.join("menu");
+
   io.emit('addGames', games);
 
 
@@ -35,8 +37,16 @@ io.on('connection', function(socket) {
 
   });
   socket.on('message', function(msg) {
-    io.emit('message', msg);
-
+    var rooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
+    console.log(rooms[0]);
+    io.to(rooms[0]).emit('message', msg);
+    
+  });
+  socket.on('joinGame', function(msg) {
+    console.log(msg);
+    socket.emit('joinedGame',0);
+    socket.leave("menu");
+    socket.join(msg);
   });
 });
 

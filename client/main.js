@@ -29,10 +29,35 @@ socket.on('message', function(text) {
 socket.on('addGames',function(data){
   $("#games").empty();
   for(var i = 0; i<data.length; i++){
-    $("#games").append("<button class='gameBtn'>"+data[i]+"</button>")
+    $("#games").append("<button class='gameBtn' onclick='joinGame("+data[i]+")'>"+data[i]+"</button>")
 
   }
 });
 function joinGame(gameNum){
+  socket.emit('joinGame',gameNum);
+}
+
+socket.on('joinedGame',function(data){
+  hideMenu();
+  showGame();
+})
+socket.on('menuPage',function(data){
+  hideGame();
+  showMenu();
+})
+
+function hideMenu(){
+  $("#menu").hide();
+}
+function showGame(){
+  $("#game").show();
+
+}
+function showMenu(){
+  $("#menu").show();
+
+}
+function hideGame(){
+  $("#game").hide();
 
 }

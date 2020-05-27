@@ -15,6 +15,16 @@ main {
   padding: 25px 25px 0 25px;
 }
 
+#question{
+  width: 100%;
+  height: 300px;
+  overflow: scroll;
+  border: solid 1px #e5e5eb;
+  border-radius: 10px;
+
+  padding: 25px 25px 0 25px;
+}
+
 #chatBox {
   width: 100%;
   height: 300px;
@@ -34,7 +44,7 @@ p {
   padding:0;
   padding-top: 5px;
   padding-left: 10px;
-  font-size:10px;
+  font-size:13px;
   line-height:15px;
 }
 
