@@ -1,14 +1,14 @@
 var socket = io();
 
-var form = document.querySelector('form');
+var form = document.getElementById("chatForm");
 
-/*form.addEventListener('submit', function(e) {
+form.addEventListener('submit', function(e) {
   e.preventDefault();
   var input = document.querySelector('#message');
   var text = input.value;
   socket.emit('message', text);
   input.value = '';
-});*/
+});
 $("#createGame").click(function(){
   socket.emit('newGame',0);
 });
@@ -16,7 +16,7 @@ socket.on('message', function(text) {
   if (!text) {
     return;
   }
-  var container = document.querySelector('section');
+  var container = document.getElementById('chatBox');
   var newMessage = document.createElement('p');
   newMessage.innerText = text;
   container.appendChild(newMessage);
@@ -33,3 +33,6 @@ socket.on('addGames',function(data){
 
   }
 });
+function joinGame(gameNum){
+
+}
