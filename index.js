@@ -78,10 +78,13 @@ io.on('connection', function(socket) {
 
     socket.emit('leaveRoom',0);
     console.log(currentRoom+ " <----Current Room");
-    gameList[currentRoom+""]["players"] = gameList[currentRoom+""]["players"].filter(item => item.id!=socket.id);
-    io.to(currentRoom).emit('playerList', gameList[currentRoom+""]["players"]);
+    if(gameList[currentRoom+""] !== undefined) {
+      gameList[currentRoom+""]["players"] = gameList[currentRoom+""]["players"].filter(item => item.id!=socket.id);
+      io.to(currentRoom).emit('playerList', gameList[currentRoom+""]["players"]);
+      checkLeaveRoom(currentRoom);
 
-    checkLeaveRoom(currentRoom);
+    }
+
     io.emit('addGames', gameList);
 
 
@@ -96,11 +99,14 @@ io.on('connection', function(socket) {
     socket.leave(currentRoom);
     
     if(currentRoom!="menu"){
-      gameList[currentRoom+""]["players"] = gameList[currentRoom+""]["players"].filter(item => item.id!=socket.id);
-      io.to(currentRoom+"").emit('playerList', gameList[currentRoom+""]["players"]);
+      if(gameList[currentRoom+""] !== undefined){
 
-      checkLeaveRoom(currentRoom);
-      io.emit('addGames', gameList);
+        gameList[currentRoom+""]["players"] = gameList[currentRoom+""]["players"].filter(item => item.id!=socket.id);
+        io.to(currentRoom+"").emit('playerList', gameList[currentRoom+""]["players"]);
+        checkLeaveRoom(currentRoom);
+        io.emit('addGames', gameList);
+
+      }
 
     }
 

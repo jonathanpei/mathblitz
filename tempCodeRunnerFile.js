@@ -1,1 +1,1 @@
-io.to
+        io.emit('addGames', gameList);
