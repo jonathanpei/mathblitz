@@ -12,6 +12,9 @@ form.addEventListener('submit', function(e) {
 $("#createGame").click(function(){
   socket.emit('newGame',0);
 });
+$("#leave").click(function(){
+  socket.emit('leaveRoom',0);
+});
 socket.on('message', function(text) {
   if (!text) {
     return;
@@ -41,7 +44,7 @@ socket.on('joinedGame',function(data){
   hideMenu();
   showGame();
 })
-socket.on('menuPage',function(data){
+socket.on('leaveRoom',function(data){
   hideGame();
   showMenu();
 })

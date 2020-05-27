@@ -48,6 +48,13 @@ io.on('connection', function(socket) {
     socket.leave("menu");
     socket.join(msg);
   });
+  socket.on('leaveRoom',function(msg){
+    var rooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
+    console.log(rooms[0]);
+    socket.leave(rooms[0]);
+    socket.join("menu");
+    socket.emit('leaveRoom',0);
+  });
 });
 
 
