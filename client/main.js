@@ -62,6 +62,8 @@ form.addEventListener('submit', function(e) {
   e.preventDefault();
   var input = document.querySelector('#message');
   var text = input.value;
+  var userName = getCookie("name");
+  text = userName + ": " + text;
   socket.emit('message', text);
   input.value = '';
 });
@@ -77,8 +79,7 @@ socket.on('message', function(text) {
   }
   var container = document.getElementById('chatBox');
   var newMessage = document.createElement('p');
-  var userName = getCookie("name");
-  newMessage.innerText = userName + ": " + text;
+  newMessage.innerText = text;
   container.appendChild(newMessage);
 
   var seperator = document.createElement('br');
