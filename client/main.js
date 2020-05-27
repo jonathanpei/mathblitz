@@ -19,17 +19,22 @@ function promptUser () {
   let person = null;
   console.log(document.cookie);
   if (getCookie("name") != "") {
+    putName();
     return;
   }
   while (person == null) {
     person = prompt("Please enter your name using only letters and numbers", randomName());
     if (person != null) {
-      if (person.includes(';')) {
+      person = person.replace(/\s/g,'');
+    }
+    if (person != null) {
+      if (person.includes(';') || person == "") {
         person = null;
       }
     }
   }
   setCookie("name",person,30);
+  putName();
 }
 
 function getCookie(cname) {
@@ -45,6 +50,10 @@ function getCookie(cname) {
     }
   }
   return "";
+}
+
+function putName() {
+  document.getElementById("putNameHere").innerText = getCookie("name");
 }
 
 var form = document.getElementById("chatForm");
