@@ -8,6 +8,13 @@ function setCookie(cname,cvalue,exdays) {
   console.log(document.cookie);
 }
 
+function randomName() {
+  let names = ["porcupine","hedgehog","pineapple","chicken","horse","cabbage","watermelon","dog","fish","elephant","rose","popcorn"];
+  let name = names[Math.floor(Math.random() * 12)];
+  let number = Math.ceil(Math.random() * 100);
+  return (name.concat(number.toString()));
+}
+
 function promptUser () {
   let person = null;
   console.log(document.cookie);
@@ -15,9 +22,11 @@ function promptUser () {
     return;
   }
   while (person == null) {
-    person = prompt("Please enter your name using only letters and numbers", 'Bakshar Ban Everyone Beccherla');
-    if (person.includes(';')) {
-      person = null;
+    person = prompt("Please enter your name using only letters and numbers", randomName());
+    if (person != null) {
+      if (person.includes(';')) {
+        person = null;
+      }
     }
   }
   setCookie("name",person,30);
