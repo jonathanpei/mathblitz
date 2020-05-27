@@ -2,14 +2,16 @@ var socket = io();
 
 var form = document.querySelector('form');
 
-form.addEventListener('submit', function(e) {
+/*form.addEventListener('submit', function(e) {
   e.preventDefault();
   var input = document.querySelector('#message');
   var text = input.value;
   socket.emit('message', text);
   input.value = '';
+});*/
+$("#createGame").click(function(){
+  socket.emit('newGame',0);
 });
-
 socket.on('message', function(text) {
   if (!text) {
     return;
@@ -23,4 +25,11 @@ socket.on('message', function(text) {
   container.appendChild(seperator);
 
   container.scrollTop = container.scrollHeight;
+});
+socket.on('addGames',function(data){
+  $("#games").empty();
+  for(var i = 0; i<data.length; i++){
+    $("#games").append("<button class='gameBtn'>"+data[i]+"</button>")
+
+  }
 });
