@@ -11,7 +11,10 @@ function setCookie(cname,cvalue,exdays) {
 function promptUser () {
   let person = null;
   console.log(document.cookie);
-  while (person == null && !document.cookie.startsWith("name")) {
+  if (getCookie("name") != "") {
+    return;
+  }
+  while (person == null) {
     person = prompt("Please enter your name using only letters and numbers", 'Bakshar Ban Everyone Beccherla');
     if (person.includes(';')) {
       person = null;
