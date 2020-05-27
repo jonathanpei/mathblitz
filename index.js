@@ -119,7 +119,7 @@ io.on('connection', function(socket) {
   })
 });
 function checkLeaveRoom(roomName){
-  if(gameList[roomName+""]["players"].length==0){
+  if(gameList[roomName+""]!== undefined && gameList[roomName+""]["players"].length==0){
     delete gameList[roomName+""];
   }
 
