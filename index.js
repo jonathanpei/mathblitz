@@ -25,8 +25,13 @@ function addGames(socket){
 }
 
 io.on('connection', function(socket) {
+  var cookies = cookie.parse(socket.handshake.headers.cookie);
+
+
   socket.join("menu");
   playerRoomList[socket.id+""] = "menu";
+
+
   io.emit('addGames', gameList);
 
 
@@ -41,7 +46,9 @@ io.on('connection', function(socket) {
     socket.join(gameNumber);
     playerRoomList[socket.id+""] = gameNumber;
 
-    gameList[gameNumber+""]["players"] = [socket.id];
+    gameList[gameNumber+""]["players"] = [{id:socket.id,name:cookies.name}];
+    io.to(gameNumber+"").emit('playerList', gameList[gameNumber+""]["players"]);
+
     gameNumber++;
 
   });
@@ -54,18 +61,25 @@ io.on('connection', function(socket) {
     socket.emit('joinedGame',0);
     socket.leave("menu");
     socket.join(msg);
-    gameList[msg+""]["players"].push(socket.id);
+    gameList[msg+""]["players"].push({id:socket.id,name:cookies.name});
     playerRoomList[socket.id+""] = msg;
+
+    io.to(msg).emit('playerList', gameList[msg+""]["players"]);
+
   });
   socket.on('leaveRoom',function(msg){
     var rooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
     var currentRoom = playerRoomList[socket.id+""];
+
     playerRoomList[socket.id+""] = "menu";
     socket.leave(currentRoom);
     socket.join("menu");
+
     socket.emit('leaveRoom',0);
     console.log(currentRoom+ " <----Current Room");
-    gameList[currentRoom+""]["players"] = gameList[currentRoom+""]["players"].filter(item => item!=socket.id);
+    gameList[currentRoom+""]["players"] = gameList[currentRoom+""]["players"].filter(item => item.id!=socket.id);
+    io.to(currentRoom).emit('playerList', gameList[currentRoom+""]["players"]);
+
     checkLeaveRoom(currentRoom);
     io.emit('addGames', gameList);
 
@@ -79,11 +93,14 @@ io.on('connection', function(socket) {
 
     var rooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
     socket.leave(currentRoom);
+    
     if(currentRoom!="menu"){
-      gameList[currentRoom+""]["players"] = gameList[currentRoom+""]["players"].filter(item => item!=socket.id);
+      gameList[currentRoom+""]["players"] = gameList[currentRoom+""]["players"].filter(item => item.id!=socket.id);
+      io.to(currentRoom+"").emit('playerList', gameList[currentRoom+""]["players"]);
 
       checkLeaveRoom(currentRoom);
       io.emit('addGames', gameList);
+
     }
 
   })

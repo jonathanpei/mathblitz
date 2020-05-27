@@ -95,6 +95,13 @@ socket.on('addGames',function(data){
     }
   }
 });
+socket.on('playerList',function(data){
+  $("#names").empty();
+  for(var i = 0; i<data.length; i++){
+    $("#names").append("<p>"+data[i].name+"</p>");
+
+  }
+});
 function joinGame(gameNum){
   socket.emit('joinGame',gameNum);
 }

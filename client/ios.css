@@ -15,15 +15,6 @@ main {
   padding: 25px 25px 0 25px;
 }
 
-#question{
-  width: 100%;
-  height: 300px;
-  overflow: scroll;
-  border: solid 1px #e5e5eb;
-  border-radius: 10px;
-
-  padding: 25px 25px 0 25px;
-}
 
 #chatBox {
   width: 100%;
@@ -33,10 +24,6 @@ main {
   border-radius: 10px;
 
 }
-
-
-
-
 
 
 p {
@@ -79,4 +66,32 @@ input {
   border: solid 1px #e5e5eb;
   border-radius: 10px;
 
+}
+
+
+#question{
+  width: 100%;
+  height: 400px;
+  overflow: scroll;
+  border: solid 1px #e5e5eb;
+  border-radius: 10px;
+
+  display: inline-block;
+}
+#names{
+  width: 100%;
+  height: 400px;
+  overflow: scroll;
+  border: solid 1px #e5e5eb;
+  border-radius: 10px;
+  display: inline-block;
+
+}
+#leftSide {
+  float: left;
+  width: 80%;
+}
+#rightSide {
+  float: right;
+  width: 20%;
 }
