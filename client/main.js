@@ -2,7 +2,6 @@ var socket = io();
 
 function promptUser () {
   let person = null;
-  document.cookie = "";
   while (person == null && !document.cookie.startsWith("name")) {
     person = prompt("Please enter your name using only letters and numbers", 'Bakshar Ban Everyone Beccherla');
     if (person.includes(';')) {
