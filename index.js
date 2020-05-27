@@ -16,7 +16,6 @@ var io = require('socket.io')(server);
 
 
 var gameNumber = 1;
-var games = [];
 var gameList = {};
 app.get('/login', function (req, res) {
   res.sendFile(__dirname+"/client/index.html");
@@ -27,13 +26,12 @@ function addGames(socket){
 io.on('connection', function(socket) {
   socket.join("menu");
 
-  io.emit('addGames', games);
+  io.emit('addGames', gameList);
 
 
 
   socket.on('newGame', function(msg) {
 
-    games.push(gameNumber);
     gameList[gameNumber+""]={name:msg};
     console.log(gameList);
     io.emit('addGames', gameList);
