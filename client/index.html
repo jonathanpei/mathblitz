@@ -15,8 +15,10 @@
 <body onload="promptUser()">
   <main>
     <div id="menu">
-      BAKSHAR &quot;BAN EVERYONE&quot; BECCHERLA
-      <button id="createGame">Create Game</button>
+      <form onsubmit="return false" id="createGameForm">
+        <button type = "submit" id="createGame">Create Game</button>
+        <input id="gameName" placeholder="Game Name"/>
+      </form>
       <section id="games">
 
       </section>
@@ -29,7 +31,7 @@
 
       <form onsubmit="return false" id="ansForm">
         <input id="ansBox"/>
-        <button type="ansSubmit">Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </div>
     <br/>
