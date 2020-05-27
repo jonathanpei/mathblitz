@@ -10,7 +10,7 @@ form.addEventListener('submit', function(e) {
   input.value = '';
 });
 $("#createGame").click(function(){
-  socket.emit('newGame',0);
+  socket.emit('newGame',document.getElementById("gameName").value);
 });
 $("#leave").click(function(){
   socket.emit('leaveRoom',0);
@@ -31,9 +31,10 @@ socket.on('message', function(text) {
 });
 socket.on('addGames',function(data){
   $("#games").empty();
-  for(var i = 0; i<data.length; i++){
-    $("#games").append("<button class='gameBtn' onclick='joinGame("+data[i]+")'>"+data[i]+"</button>")
-
+  for(var key in data){
+    if(data.hasOwnProperty(key)){
+      $("#games").append("<button class='gameBtn' onclick='joinGame("+key+")'>"+data[key+""]["name"]+"</button>")
+    }
   }
 });
 function joinGame(gameNum){
