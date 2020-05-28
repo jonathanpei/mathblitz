@@ -26,13 +26,13 @@ function addGames(socket) {
 
 io.on('connection', function (socket) {
   var cookies;
-
+  var curName = "placeholder";
 
   socket.join("menu");
   socket.on('nameSet', function (msg) {
     cookies = cookie.parse(socket.handshake.headers.cookie+"");
-
-    playerList[socket.id + ""] = { name: cookies.name, room: "menu" };
+    curName = cookies.name;
+    playerList[socket.id + ""] = { name: curName, room: "menu" };
     io.emit('universalPlayerList', playerList);
 
 
@@ -52,9 +52,9 @@ io.on('connection', function (socket) {
     socket.emit('joinedGame', 0);
     socket.leave("menu");
     socket.join(gameNumber);
-    playerList[socket.id + ""] = { name: cookies.name, room: gameNumber + "" };
+    playerList[socket.id + ""] = { name: curName, room: gameNumber + "" };
 
-    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: cookies.name }];
+    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: curName }];
     io.to(gameNumber + "").emit('playerList', gameList[gameNumber + ""]["players"]);
 
     gameNumber++;
@@ -70,8 +70,8 @@ io.on('connection', function (socket) {
     socket.emit('joinedGame', 0);
     socket.leave("menu");
     socket.join(msg);
-    gameList[msg + ""]["players"].push({ id: socket.id, name: cookies.name });
-    playerList[socket.id + ""] = { name: cookies.name, room: msg + "" };
+    gameList[msg + ""]["players"].push({ id: socket.id, name: curName });
+    playerList[socket.id + ""] = { name: curName, room: msg + "" };
 
     io.to(msg).emit('playerList', gameList[msg + ""]["players"]);
     io.emit('universalPlayerList', playerList);
