@@ -57,6 +57,7 @@ function getCookie(cname) {
 
 function putName() {
   document.getElementById("putNameHere").innerText = getCookie("name");
+  document.getElementById("gameName").value = getCookie("name")+"'s game";
 }
 
 var form = document.getElementById("chatForm");
