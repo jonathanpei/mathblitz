@@ -71,7 +71,7 @@ form.addEventListener('submit', function(e) {
   input.value = '';
 });
 $("#createGame").click(function(){
-  socket.emit('newGame',document.getElementById("gameName").value);
+  socket.emit('newGame',{name:document.getElementById("gameName").value});
 });
 $("#leave").click(function(){
   socket.emit('leaveRoom',0);

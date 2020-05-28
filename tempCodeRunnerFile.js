@@ -1,1 +1,1 @@
-gameList
+msg

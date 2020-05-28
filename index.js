@@ -46,7 +46,7 @@ io.on('connection', function (socket) {
 
   socket.on('newGame', function (msg) {
 
-    gameList[gameNumber + ""] = { name: msg };
+    gameList[gameNumber + ""] = { name: msg.name };
     console.log(gameList);
     io.emit('addGames', gameList);
     socket.emit('joinedGame', 0);

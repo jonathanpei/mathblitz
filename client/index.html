@@ -16,16 +16,28 @@
   <main>
     <div id="menu">
       Well, here you are, <span id="putNameHere"></span>. Here's what you can do:<br />
-      <form onsubmit="return false" id="createGameForm">
-        <button type="submit" id="createGame">Create Game</button>
-        <input autocomplete = "off" id="gameName" placeholder="Game Name" />
-      </form>
+      <button class="collapsible">Game Options</button>
+      <div class="content" id="gameForm">
+        <form onsubmit="return false" id="createGameForm">
+          <p>Game Name</p>
+          <input autocomplete="off" value= "My Game" id="gameName" placeholder="Game Name" />
+          <br/>
+          <p>Time Limit</p>
+          <input autocomplete="off" value = "60" id="gameLimit" min="1" max="600"type="number" />
+          <br/>
+          <p>Problems</p>
+          <br/>
+          <input autocomplete="off" value = "10" id="gameProblems" min="1" max="50"type="number" />
+          <button type="submit" id="createGame">Create Game</button>
+
+        </form>
+      </div>
       <div class="leftSide">
         <section id="games">
 
         </section>
       </div>
-      <div class = "rightSide">
+      <div class="rightSide">
         <section id="universalNames">
 
         </section>
@@ -34,44 +46,60 @@
 
     <div style="display:none;" id="game">
       <div id="gameButtons" style="width: 100%;">
-        <button style = "float:right" id="leave">Leave</button>
+        <button style="float:right" id="leave">Leave</button>
 
-      <button style = "float:right" id="start">Start</button>
+        <button style="float:right" id="start">Start</button>
 
-      <hr style="visibility: hidden;"/>
-      <hr style="visibility: hidden;"/>
-      <hr style="visibility: hidden;"/>
-      <hr style="visibility: hidden;"/>
-      <hr style="visibility: hidden;"/>
-      <hr style="visibility: hidden;"/>
+        <hr style="visibility: hidden;" />
+        <hr style="visibility: hidden;" />
+        <hr style="visibility: hidden;" />
+        <hr style="visibility: hidden;" />
+        <hr style="visibility: hidden;" />
+        <hr style="visibility: hidden;" />
 
-    </div>
+      </div>
       <div>
-      <div class="leftSide">
-        <section id="question">
+        <div class="leftSide">
+          <section id="question">
 
-        </section>
-      </div>
-      <div class="rightSide">
-        <section id="names">
+          </section>
+        </div>
+        <div class="rightSide">
+          <section id="names">
 
-        </section>
+          </section>
+        </div>
       </div>
-    </div>
       <form onsubmit="return false" id="ansForm">
-        <input autocomplete="off" id="ansBox" />
+        <input class="submitBox" autocomplete="off" id="ansBox" />
         <button type="submit">Submit</button>
       </form>
     </div>
     <br />
     <section id="chatBox"></section>
     <form onsubmit="return false" id="chatForm">
-      <input autocomplete="off" id="message" />
+      <input class="submitBox" autocomplete="off" id="message" />
       <button type="submit">Send</button>
     </form>
     <br /><br />
 
     <script src="main.js"></script>
+    <script>
+      var coll = document.getElementsByClassName("collapsible");
+      var i;
+      
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.maxHeight){
+            content.style.maxHeight = null;
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+          } 
+        });
+      }
+      </script>
 </body>
 
 </html>
