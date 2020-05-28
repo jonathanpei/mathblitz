@@ -62,7 +62,7 @@ io.on('connection', function (socket) {
       msg.name = curName+"'s Game";
     }
     console.log(msg);
-    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, ep:parseInt(msg.ep),hp:parseInt(msg.hp),answeringPhase: false, currentProblem: 0 };
+    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, ep:parseInt(msg.ep),hp:parseInt(msg.hp),answeringPhase: false, currentProblem: 0,started:false };
     console.log(gameList);
     io.emit('addGames', gameList);
     socket.emit('joinedGame', 0);
@@ -154,7 +154,10 @@ io.on('connection', function (socket) {
   });
   socket.on('start', function (msg) {
     if (playerList[socket.id + ""] === undefined) return;
-    waitProblem(playerList[socket.id + ""].room);
+    if(!gameList[playerList[socket.id+""].room].started){
+      gameList[playerList[socket.id+""].room].started=true;
+      waitProblem(playerList[socket.id + ""].room);
+    }
   });
   socket.on('submitAns',function(msg){
     if (playerList[socket.id + ""] === undefined) return;
@@ -193,8 +196,10 @@ function startProblem(roomName) {
         return console.log(err);
       }
       var problemStatement = data;
+      problemStatement=problemStatement.split("\\begin{center}").join(" ");
+      problemStatement=problemStatement.split("\\end{center}").join(" ");
       io.to(roomName).emit('showProblem', problemStatement);
-      console.log(problemStatement)
+      console.log(currentYear + " Problem: "+currentProblem);
       console.log(gameList[roomName + ""]["answer"]);
     });
     io.to(roomName).emit('showImage', "/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/images/0.png");
@@ -212,16 +217,17 @@ function startProblem(roomName) {
     if(currentYearNumber==1) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_I"][currentProblem+""]);
     if(currentYearNumber==2) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_II"][currentProblem+""]);
 
-    console.log(gameList[roomName + ""]["answer"]);
-
+    
     fs.readFile(__dirname + "/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/latex.txt", 'utf8', function (err, data) {
       if (err) {
         return console.log(err);
       }
       var problemStatement = data;
+      problemStatement=problemStatement.split("\\begin{center}").join(" ");
+      problemStatement=problemStatement.split("\\end{center}").join(" ");
       io.to(roomName).emit('showProblem', problemStatement);
-      console.log(problemStatement)
-    });
+      console.log(currentYear+ " "+currentYearNumber+" Problem: "+currentProblem);
+      console.log(gameList[roomName + ""]["answer"]);    });
     io.to(roomName).emit('showImage', "/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/images/0.png");
 
   }
