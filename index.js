@@ -54,7 +54,7 @@ io.on('connection', function (socket) {
     socket.join(gameNumber);
     playerList[socket.id + ""] = { name: curName, room: gameNumber + "" };
 
-    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: curName }];
+    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: curName,score:0 }];
     io.to(gameNumber + "").emit('playerList', gameList[gameNumber + ""]["players"]);
 
     gameNumber++;
@@ -70,7 +70,7 @@ io.on('connection', function (socket) {
     socket.emit('joinedGame', 0);
     socket.leave("menu");
     socket.join(msg);
-    gameList[msg + ""]["players"].push({ id: socket.id, name: curName });
+    gameList[msg + ""]["players"].push({ id: socket.id, name: curName,score:0 });
     playerList[socket.id + ""] = { name: curName, room: msg + "" };
 
     io.to(msg).emit('playerList', gameList[msg + ""]["players"]);
