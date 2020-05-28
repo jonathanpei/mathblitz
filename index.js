@@ -53,9 +53,13 @@ io.on('connection', function (socket) {
   socket.on('newGame', function (msg) {
     if (msg.timeLimit > 600 || msg.timeLimit < 1) msg.timeLimit = 60;
     if (msg.problems < 1 || msg.problems > 50) msg.problems = 10;
-
+    if (msg.easiestProb < 1 || msg.easiestProb > 15) msg.easiestProb = 1;
+    if (msg.hardestProb < 1 || msg.hardestProb > 15 || msg.hardestProb < msg.easiestProb) msg.hardestProb = 15;
+    
+    
+    
     console.log(msg);
-    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, answeringPhase: false, currentProblem: 0 };
+    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, easiestProb: msg.easiestProb, hardestProb: msg.hardestProb, answeringPhase: false, currentProblem: 0 };
     console.log(gameList);
     io.emit('addGames', gameList);
     socket.emit('joinedGame', 0);
