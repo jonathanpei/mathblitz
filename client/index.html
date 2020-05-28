@@ -33,8 +33,19 @@
     </div>
 
     <div style="display:none;" id="game">
-      <button id="leave">Leave</button>
-      <br />
+      <div id="gameButtons" style="width: 100%;">
+      <button style = "float:right" id="start">Start</button>
+
+      <button style = "float:right" id="leave">Leave</button>
+      <hr style="visibility: hidden;"/>
+      <hr style="visibility: hidden;"/>
+      <hr style="visibility: hidden;"/>
+      <hr style="visibility: hidden;"/>
+      <hr style="visibility: hidden;"/>
+      <hr style="visibility: hidden;"/>
+
+    </div>
+      <div>
       <div class="leftSide">
         <section id="question">
 
@@ -45,6 +56,7 @@
 
         </section>
       </div>
+    </div>
       <form onsubmit="return false" id="ansForm">
         <input autocomplete="off" id="ansBox" />
         <button type="submit">Submit</button>

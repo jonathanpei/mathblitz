@@ -1,1 +1,1 @@
-    console.log("MSDFSDFMSDFLKSDJFKLJSDKLSJDF " + msg);
+gameList
