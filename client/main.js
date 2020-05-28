@@ -84,6 +84,7 @@ $("#createGame").click(function(){
   if(document.getElementById("hp").value<document.getElementById("ep").value) {
     document.getElementById("ep").value = 1; document.getElementById("hp").value = 15;
   }
+  document.getElementById("start").style.display = "inline-block";
   socket.emit('newGame',{
     name:document.getElementById("gameName").value,
     timeLimit:document.getElementById("gameTimeLimit").value,
@@ -95,6 +96,7 @@ $("#createGame").click(function(){
 });
 $("#start").click(function(){
   socket.emit('start',0);
+  document.getElementById("start").style.display = "none";
 });
 $("#leave").click(function(){
   socket.emit('leaveRoom',0);
@@ -159,15 +161,9 @@ socket.on('waiting',function(data){
 socket.on('showProblem',function(data){
   document.getElementById("questionStatement").innerHTML = data;
   MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("questionStatement")]);
-
 });
 socket.on('showImage',function(data){
-  try {
     document.getElementById("questionImg").src = data;
-  }
-  catch (err) {
-    console.log("Bruh");
-  }
 });
 function joinGame(gameNum){
   socket.emit('joinGame',gameNum);
@@ -209,6 +205,19 @@ function hideGame(){
   $("#game").hide();
 
 }
+
+socket.on('imgSetup',function(data){
+    document.getElementById("question").style.width = "59.5%";
+    document.getElementById("img").style.width = "39.5%";
+    document.getElementById("img").style.display = "inline-block";
+})
+
+
+socket.on('noImgSetup',function(data){
+  document.getElementById("question").style.width = "100%";
+  document.getElementById("img").style.width = "0%";
+  document.getElementById("img").style.display = "none";
+})
 
 socket.on("console",function(msg){
   console.log(msg);

@@ -219,10 +219,12 @@ function startProblem(roomName) {
     });
     var url = "https://raw.githubusercontent.com/RadiantCheddar/mathbowl/master/client/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/images/0.png";
     if(UrlExists(url)) {
-    console.log("WORKS");
+      console.log("WORKS");
+      io.to(roomName).emit('imgSetup');
       io.to(roomName).emit('showImage', url);
     }
     else {
+      io.to(roomName).emit('noImgSetup');
       console.log("Bruh no url here rn");
     }
   } else if (randint >= 17) {
@@ -253,10 +255,12 @@ function startProblem(roomName) {
 
      var url = "https://raw.githubusercontent.com/RadiantCheddar/mathbowl/master/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/images/0.png";
      if(UrlExists(url)) {
+       io.to(roomName).emit('imgSetup');
        io.to(roomName).emit('showImage', url);
        console.log("WORKS");
      }
      else {
+       io.to(roomName).emit('noImgSetup');
        console.log("Bruh this url no here rn");
      }
   }

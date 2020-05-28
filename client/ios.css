@@ -11,7 +11,6 @@ main {
   overflow: scroll;
   border: solid 1px #e5e5eb;
   border-radius: 10px;
-
   display: inline-block;
 }
 
@@ -68,6 +67,27 @@ button {
 
 }
 
+#img {
+  float: right;
+  width: 0%;
+  height: 400px;
+  overflow: scroll;
+  border: solid 1px #e5e5eb;
+  border-radius: 10px;
+  display: none;
+}
+
+.leftSide {
+  clear: both;
+}
+
+.img-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  height: auto;
+}
 
 #question{
   width: 100%;
@@ -75,8 +95,12 @@ button {
   overflow: scroll;
   border: solid 1px #e5e5eb;
   border-radius: 10px;
-
+  float: left;
   display: inline-block;
+}
+#questionStatement {
+  font-size: x-large;
+  line-height: 1.5em;
 }
 #names{
   width: 100%;
