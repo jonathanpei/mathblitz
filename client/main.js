@@ -20,7 +20,7 @@ function promptUser () {
   console.log(document.cookie);
   if (getCookie("name") != "") {
     socket.emit("nameSet","")
-    
+
 
     putName();
     return;
@@ -74,7 +74,7 @@ form.addEventListener('submit', function(e) {
 $("#createGame").click(function(){
   if(document.getElementById("gameTimeLimit").value<1 || document.getElementById("gameTimeLimit").value>600) document.getElementById("gameTimeLimit").value = 60;
   if(document.getElementById("gameProblems").value<1 || document.getElementById("gameProblems").value>50) document.getElementById("gameProblems").value = 10;
-  
+
   if(document.getElementById("ep").value<1 || document.getElementById("ep").value>15) {
     document.getElementById("ep").value = 1;
   }
@@ -162,7 +162,12 @@ socket.on('showProblem',function(data){
 
 });
 socket.on('showImage',function(data){
-  document.getElementById("questionImg").src = data;
+  try {
+    document.getElementById("questionImg").src = data;
+  }
+  catch (err) {
+    console.log("Bruh");
+  }
 });
 function joinGame(gameNum){
   socket.emit('joinGame',gameNum);

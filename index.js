@@ -6,6 +6,7 @@ var cookie = require('cookie');
 var http = require('http');
 var server = http.Server(app);
 var fs = require('fs');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 app.use(express.static('client'));
 app.use(cookieParser());
 server.listen(PORT, function () {
@@ -183,6 +184,18 @@ function checkLeaveRoom(roomName) {
 
 }
 
+function UrlExists(url) {
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    if (http.status != 404) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 function startProblem(roomName) {
   if (!roomStillOpen(roomName)) return false;
 
@@ -204,9 +217,14 @@ function startProblem(roomName) {
       console.log(currentYear + " Problem: "+currentProblem);
       console.log(gameList[roomName + ""]["answer"]);
     });
-    io.to(roomName).emit('showImage', "/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/images/0.png");
-
-
+    var url = "https://raw.githubusercontent.com/RadiantCheddar/mathbowl/master/client/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/images/0.png";
+    if(UrlExists(url)) {
+    console.log("WORKS");
+      io.to(roomName).emit('showImage', url);
+    }
+    else {
+      console.log("Bruh no url here rn");
+    }
   } else if (randint >= 17) {
     currentYear = Math.floor((randint - 17) / 2) + 2000;
     if (randint % 2 == 0) {
@@ -230,10 +248,17 @@ function startProblem(roomName) {
       problemStatement=problemStatement.split("\\end{center}").join(" ");
       io.to(roomName).emit('showProblem', problemStatement);
       console.log(currentYear+ " "+currentYearNumber+" Problem: "+currentProblem);
-      console.log(gameList[roomName + ""]["answer"]);   
+      console.log(gameList[roomName + ""]["answer"]);
      });
-    io.to(roomName).emit('showImage', "/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/images/0.png");
 
+     var url = "https://raw.githubusercontent.com/RadiantCheddar/mathbowl/master/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/images/0.png";
+     if(UrlExists(url)) {
+       io.to(roomName).emit('showImage', url);
+       console.log("WORKS");
+     }
+     else {
+       console.log("Bruh this url no here rn");
+     }
   }
 
   gameList[roomName + ""].answeringPhase = true;
