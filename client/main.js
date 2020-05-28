@@ -34,7 +34,7 @@ function promptUser () {
     }
   }
   setCookie("name",person,30);
-  putName();
+  location.reload();
 }
 
 function getCookie(cname) {
