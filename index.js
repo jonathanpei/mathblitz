@@ -33,6 +33,7 @@ io.on('connection', function (socket) {
     cookies = cookie.parse(socket.handshake.headers.cookie+"");
 
     playerList[socket.id + ""] = { name: cookies.name, room: "menu" };
+    io.emit('universalPlayerList', playerList);
 
 
   });
