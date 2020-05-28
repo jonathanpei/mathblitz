@@ -82,6 +82,15 @@ io.on('connection', function (socket) {
   });
   socket.on('leaveRoom', function (msg) {
     var rooms = Object.keys(socket.rooms).filter(item => item != socket.id);
+    if(playerList[socket.id + ""]===undefined){
+      socket.join("menu");
+      socket.emit('leaveRoom', 0);
+      io.emit('addGames', gameList);
+
+      io.emit('universalPlayerList', playerList);
+  
+      return;
+    }
     var currentRoom = playerList[socket.id + ""].room;
 
     playerList[socket.id + ""].room = "menu";
@@ -130,6 +139,7 @@ io.on('connection', function (socket) {
 
   });
   socket.on('start',function(msg){
+    if(playerList[socket.id+""] === undefined) return;
     waitProblem(playerList[socket.id+""].room);
   });
 
