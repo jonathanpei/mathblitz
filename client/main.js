@@ -143,7 +143,10 @@ socket.on('showProblem',function(data){
   MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("questionStatement")]);
 
 });
+socket.on('showImage',function(data){
+  document.getElementById("questionImg").src = data;
 
+});
 function joinGame(gameNum){
   socket.emit('joinGame',gameNum);
 }

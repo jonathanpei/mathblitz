@@ -169,6 +169,7 @@ function startProblem(roomName){
       console.log(problemStatement)
 
     });
+    io.to(roomName).emit('showImage',"/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/statement.png");
 
     
   } else if (randint >= 17) {
@@ -189,7 +190,8 @@ function startProblem(roomName){
       io.to(roomName).emit('showProblem', problemStatement);
       console.log(problemStatement)
     });
-    
+    io.to(roomName).emit('showImage',"/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/statement.png");
+
   }
 
   gameList[roomName+""].answeringPhase=true;
