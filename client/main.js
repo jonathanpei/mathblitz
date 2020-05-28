@@ -72,7 +72,16 @@ form.addEventListener('submit', function(e) {
   input.value = '';
 });
 $("#createGame").click(function(){
-  socket.emit('newGame',{name:document.getElementById("gameName").value});
+  if(document.getElementById("gameTimeLimit").value<1 || document.getElementById("gameTimeLimit").value>600) document.getElementById("gameTimeLimit").value = 60;
+  if(document.getElementById("gameProblems").value<1 || document.getElementById("gameProblems").value>50) document.getElementById("gameProblems").value = 10;
+  socket.emit('newGame',{
+    name:document.getElementById("gameName").value,
+    timeLimit:document.getElementById("gameTimeLimit").value,
+    problems: document.getElementById("gameProblems").value
+  });
+});
+$("#start").click(function(){
+  socket.emit('start',0);
 });
 $("#leave").click(function(){
   socket.emit('leaveRoom',0);
@@ -102,7 +111,7 @@ socket.on('addGames',function(data){
 socket.on('playerList',function(data){
   $("#names").empty();
   for(var i = 0; i<data.length; i++){
-    $("#names").append("<p>"+data[i].name+"</p>");
+    $("#names").append("<p>"+data[i].score+" "+data[i].name+"</p>");
 
   }
 });
@@ -114,6 +123,27 @@ socket.on('universalPlayerList',function(data){
     }
   }
 });
+
+socket.on('clock',function(data){
+  if(data == 0)document.getElementById("gameTimer").style = "color:red;";
+  else document.getElementById("gameTimer").style = "color:black;";
+
+  document.getElementById("gameTimer").innerHTML = "Timer: "+data.toFixed(2);
+});
+
+socket.on('waiting',function(data){
+ document.getElementById("gameTimer").style = "color:black;";
+ document.getElementById("questionStatement").innerHTML = "";
+
+  document.getElementById("gameTimer").innerHTML = "The Next Problem Will Start Soon";
+});
+
+socket.on('showProblem',function(data){
+  document.getElementById("questionStatement").innerHTML = data;
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("questionStatement")]);
+
+});
+
 function joinGame(gameNum){
   socket.emit('joinGame',gameNum);
 }
@@ -121,6 +151,9 @@ function joinGame(gameNum){
 socket.on('joinedGame',function(data){
   hideMenu();
   showGame();
+  document.getElementById("gameTimer").innerHTML = "";
+  document.getElementById("questionStatement").innerHTML = "";
+
 })
 socket.on('leaveRoom',function(data){
   hideGame();

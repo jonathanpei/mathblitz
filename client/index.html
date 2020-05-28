@@ -9,7 +9,17 @@
   <link rel="stylesheet" type="text/css" media="screen" href="ios.css" />
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+  <script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
 </head>
 
 <body onload="promptUser()">
@@ -23,7 +33,7 @@
           <input autocomplete="off" value= "My Game" id="gameName" placeholder="Game Name" />
           <br/>
           <p>Time Limit</p>
-          <input autocomplete="off" value = "60" id="gameLimit" min="1" max="600"type="number" />
+          <input autocomplete="off" value = "60" id="gameTimeLimit" min="1" max="600"type="number" />
           <br/>
           <p>Problems</p>
           <br/>
@@ -50,6 +60,8 @@
 
         <button style="float:right" id="start">Start</button>
 
+        <h3 style="float:right" id="gameTimer"></h3>
+
         <hr style="visibility: hidden;" />
         <hr style="visibility: hidden;" />
         <hr style="visibility: hidden;" />
@@ -61,7 +73,7 @@
       <div>
         <div class="leftSide">
           <section id="question">
-
+            <p id="questionStatement"></p>
           </section>
         </div>
         <div class="rightSide">
