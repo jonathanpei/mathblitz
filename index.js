@@ -153,7 +153,6 @@ io.on('connection', function (socket) {
     if (playerList[socket.id + ""] === undefined) return;
     if (gameList[playerList[socket.id + ""].room] === undefined) return;
     if(parseInt(msg)==gameList[playerList[socket.id + ""].room].answer){
-      console.log(gameList[playerList[socket.id + ""].room].players)
       for(var i = 0; i<gameList[playerList[socket.id + ""].room].players.length; i++){
         if(gameList[playerList[socket.id + ""].room].players[i].id==socket.id && gameList[playerList[socket.id + ""].room].players[i].answered==false){
           gameList[playerList[socket.id + ""].room].players[i].score++;
@@ -161,6 +160,7 @@ io.on('connection', function (socket) {
           break;
         }
       }
+      gameList[playerList[socket.id + ""].room + ""]["players"].sort((a, b) => (a.score < b.score) ? 1 : -1)
       io.to(playerList[socket.id + ""].room).emit('playerList', gameList[playerList[socket.id + ""].room + ""]["players"]);
 
     }
@@ -186,7 +186,6 @@ function startProblem(roomName) {
         return console.log(err);
       }
       var problemStatement = data;
-      //problemStatement = problemStatement.split("$").join("$$");
       io.to(roomName).emit('showProblem', problemStatement);
       console.log(problemStatement)
       console.log(gameList[roomName + ""]["answer"]);
@@ -202,6 +201,7 @@ function startProblem(roomName) {
       currentYearNumber = 1;
     }
     currentProblem = Math.floor(Math.random() * (15)) + 1;
+
     if(currentYearNumber==1) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_I"][currentProblem+""]);
     if(currentYearNumber==2) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_II"][currentProblem+""]);
 
@@ -212,7 +212,6 @@ function startProblem(roomName) {
         return console.log(err);
       }
       var problemStatement = data;
-      // problemStatement = problemStatement.split("$").join("$$");
       io.to(roomName).emit('showProblem', problemStatement);
       console.log(problemStatement)
     });
@@ -257,6 +256,12 @@ function waitProblem(roomName) {
     return;
   }
   else {
+
+    for(var i=0; i<gameList[roomName+""].players.length; i++){
+      gameList[roomName+""].players[i].answered=false;
+    }
+
+
     io.to(roomName).emit('closeProblem', 0);
 
     gameList[roomName + ""].answeringPhase = false;
