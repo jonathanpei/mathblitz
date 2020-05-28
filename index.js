@@ -11,7 +11,13 @@ app.use(cookieParser());
 server.listen(PORT, function () {
   console.log('Chat server running');
 });
-
+var answers="";
+fs.readFile(__dirname + "/client/answers.txt", 'utf8', function (err, data) {
+  if (err) {
+    return console.log(err);
+  }
+  answers=JSON.parse(data);
+});
 var io = require('socket.io')(server);
 
 
@@ -30,7 +36,7 @@ io.on('connection', function (socket) {
 
   socket.join("menu");
   socket.on('nameSet', function (msg) {
-    cookies = cookie.parse(socket.handshake.headers.cookie+"");
+    cookies = cookie.parse(socket.handshake.headers.cookie + "");
     curName = cookies.name;
     playerList[socket.id + ""] = { name: curName, room: "menu" };
     io.emit('universalPlayerList', playerList);
@@ -45,11 +51,11 @@ io.on('connection', function (socket) {
 
 
   socket.on('newGame', function (msg) {
-    if(msg.timeLimit>600 || msg.timeLimit<1) msg.timeLimit=60;
-    if(msg.problems<1 || msg.problems >50)msg.problems = 10;
+    if (msg.timeLimit > 600 || msg.timeLimit < 1) msg.timeLimit = 60;
+    if (msg.problems < 1 || msg.problems > 50) msg.problems = 10;
 
     console.log(msg);
-    gameList[gameNumber + ""] = { name: msg.name,timeLimit:msg.timeLimit,problems:msg.problems,answeringPhase:false,currentProblem:0 };
+    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, answeringPhase: false, currentProblem: 0 };
     console.log(gameList);
     io.emit('addGames', gameList);
     socket.emit('joinedGame', 0);
@@ -57,7 +63,7 @@ io.on('connection', function (socket) {
     socket.join(gameNumber);
     playerList[socket.id + ""] = { name: curName, room: gameNumber + "" };
 
-    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: curName,score:0 }];
+    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: curName, answered: false,score: 0 }];
     io.to(gameNumber + "").emit('playerList', gameList[gameNumber + ""]["players"]);
 
     gameNumber++;
@@ -73,7 +79,8 @@ io.on('connection', function (socket) {
     socket.emit('joinedGame', 0);
     socket.leave("menu");
     socket.join(msg);
-    gameList[msg + ""]["players"].push({ id: socket.id, name: curName,score:0 });
+    gameList[msg + ""]["players"].push({ id: socket.id, name: curName, answered: false, score: 0});
+
     playerList[socket.id + ""] = { name: curName, room: msg + "" };
 
     io.to(msg).emit('playerList', gameList[msg + ""]["players"]);
@@ -82,13 +89,13 @@ io.on('connection', function (socket) {
   });
   socket.on('leaveRoom', function (msg) {
     var rooms = Object.keys(socket.rooms).filter(item => item != socket.id);
-    if(playerList[socket.id + ""]===undefined){
+    if (playerList[socket.id + ""] === undefined) {
       socket.join("menu");
       socket.emit('leaveRoom', 0);
       io.emit('addGames', gameList);
 
       io.emit('universalPlayerList', playerList);
-  
+
       return;
     }
     var currentRoom = playerList[socket.id + ""].room;
@@ -138,11 +145,26 @@ io.on('connection', function (socket) {
     }
 
   });
-  socket.on('start',function(msg){
-    if(playerList[socket.id+""] === undefined) return;
-    waitProblem(playerList[socket.id+""].room);
+  socket.on('start', function (msg) {
+    if (playerList[socket.id + ""] === undefined) return;
+    waitProblem(playerList[socket.id + ""].room);
   });
+  socket.on('submitAns',function(msg){
+    if (playerList[socket.id + ""] === undefined) return;
+    if (gameList[playerList[socket.id + ""].room] === undefined) return;
+    if(parseInt(msg)==gameList[playerList[socket.id + ""].room].answer){
+      console.log(gameList[playerList[socket.id + ""].room].players)
+      for(var i = 0; i<gameList[playerList[socket.id + ""].room].players.length; i++){
+        if(gameList[playerList[socket.id + ""].room].players[i].id==socket.id && gameList[playerList[socket.id + ""].room].players[i].answered==false){
+          gameList[playerList[socket.id + ""].room].players[i].score++;
+          gameList[playerList[socket.id + ""].room].players[i].answered=true;
+          break;
+        }
+      }
+      io.to(playerList[socket.id + ""].room).emit('playerList', gameList[playerList[socket.id + ""].room + ""]["players"]);
 
+    }
+  });
 });
 function checkLeaveRoom(roomName) {
   if (gameList[roomName + ""] !== undefined && gameList[roomName + ""]["players"].length == 0) {
@@ -151,15 +173,15 @@ function checkLeaveRoom(roomName) {
 
 }
 
-function startProblem(roomName){
-  if(!roomStillOpen(roomName)) return false;
+function startProblem(roomName) {
+  if (!roomStillOpen(roomName)) return false;
 
   var randint = Math.floor(Math.random() * 58);
   if (randint < 17) {
     currentYear = randint + 1983;
     currentProblem = Math.floor(Math.random() * (15)) + 1;
-
-    fs.readFile(__dirname+"/client/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/latex.txt", 'utf8', function (err,data) {
+    gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+""][currentProblem+""]);
+    fs.readFile(__dirname + "/client/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/latex.txt", 'utf8', function (err, data) {
       if (err) {
         return console.log(err);
       }
@@ -167,73 +189,85 @@ function startProblem(roomName){
       //problemStatement = problemStatement.split("$").join("$$");
       io.to(roomName).emit('showProblem', problemStatement);
       console.log(problemStatement)
-
+      console.log(gameList[roomName + ""]["answer"]);
     });
-    io.to(roomName).emit('showImage',"/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/statement.png");
+    io.to(roomName).emit('showImage', "/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/images/0.png");
 
-    
+
   } else if (randint >= 17) {
-    currentYear = Math.floor((randint - 17)/2) + 2000;
+    currentYear = Math.floor((randint - 17) / 2) + 2000;
     if (randint % 2 == 0) {
       currentYearNumber = 2;
     } else {
       currentYearNumber = 1;
     }
     currentProblem = Math.floor(Math.random() * (15)) + 1;
+    if(currentYearNumber==1) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_I"][currentProblem+""]);
+    if(currentYearNumber==2) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_II"][currentProblem+""]);
 
-    fs.readFile(__dirname +"/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/latex.txt", 'utf8', function (err,data) {
+    console.log(gameList[roomName + ""]["answer"]);
+
+    fs.readFile(__dirname + "/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/latex.txt", 'utf8', function (err, data) {
       if (err) {
         return console.log(err);
       }
       var problemStatement = data;
-     // problemStatement = problemStatement.split("$").join("$$");
+      // problemStatement = problemStatement.split("$").join("$$");
       io.to(roomName).emit('showProblem', problemStatement);
       console.log(problemStatement)
     });
-    io.to(roomName).emit('showImage',"/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/statement.png");
+    io.to(roomName).emit('showImage', "/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/images/0.png");
 
   }
 
-  gameList[roomName+""].answeringPhase=true;
-  gameList[roomName+""].currentProblem++;
+  gameList[roomName + ""].answeringPhase = true;
+  gameList[roomName + ""].currentProblem++;
+
   var d = new Date();
   var startingTime = d.getTime();
-  var gameTimer = setInterval(function(){
+  var gameTimer = setInterval(function () {
     d = new Date();
 
-    var elapsed = (d.getTime()-startingTime)/1000;
-    elapsed = (Math.round(elapsed*100)/100);
-    if(!roomStillOpen(roomName)) return;
+    var elapsed = (d.getTime() - startingTime) / 1000;
+    elapsed = (Math.round(elapsed * 100) / 100);
+    if (!roomStillOpen(roomName)) return;
 
-    if(roomStillOpen(roomName) && elapsed<gameList[roomName+""].timeLimit){
-      io.to(roomName).emit('clock', gameList[roomName+""].timeLimit-elapsed);
+    if (roomStillOpen(roomName) && elapsed < gameList[roomName + ""].timeLimit) {
+      io.to(roomName).emit('clock', gameList[roomName + ""].timeLimit - elapsed);
     }
-    else if(roomStillOpen(roomName)){
-      gameList[roomName+""].answeringPhase=false;
+    else if (roomStillOpen(roomName)) {
+      gameList[roomName + ""].answeringPhase = false;
       io.to(roomName).emit('clock', 0);
 
     }
   }, 10);
-  setTimeout(function(){
+  setTimeout(function () {
     clearInterval(gameTimer);
     waitProblem(roomName);
-  },gameList[roomName+""].timeLimit*1000+1000);
+  }, gameList[roomName + ""].timeLimit * 1000 + 1000);
 
-  console.log("answering "+gameList[roomName+""].currentProblem);
+  console.log("answering " + gameList[roomName + ""].currentProblem);
 
 }
-function waitProblem(roomName){
-  io.to(roomName).emit('closeProblem', 0);
+function waitProblem(roomName) {
+  if (!roomStillOpen(roomName)) return false;
 
-  if(!roomStillOpen(roomName)) return false;
-  gameList[roomName+""].answeringPhase=false;
-  io.to(roomName).emit('waiting', 0);
-  console.log("waiting");
-  setTimeout(function(){
-    startProblem(roomName);
-  },5000);
+  if (gameList[roomName + ""].currentProblem >= gameList[roomName + ""].problems) {
+    io.to(roomName).emit("gameOver", gameList[roomName + ""].players);
+    return;
+  }
+  else {
+    io.to(roomName).emit('closeProblem', 0);
+
+    gameList[roomName + ""].answeringPhase = false;
+    io.to(roomName).emit('waiting', 0);
+    console.log("waiting");
+    setTimeout(function () {
+      startProblem(roomName);
+    }, 5000);
+  }
 }
-function roomStillOpen(roomName){
-  if(gameList[roomName+""]!==undefined) return true;
+function roomStillOpen(roomName) {
+  if (gameList[roomName + ""] !== undefined) return true;
   else return false;
 }

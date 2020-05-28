@@ -86,6 +86,10 @@ $("#start").click(function(){
 $("#leave").click(function(){
   socket.emit('leaveRoom',0);
 });
+$("#submitAns").click(function(){
+  socket.emit('submitAns',document.getElementById("ansBox").value);
+  document.getElementById("ansBox").value="";
+});
 socket.on('message', function(text) {
   if (!text) {
     return;
@@ -134,6 +138,7 @@ socket.on('clock',function(data){
 socket.on('waiting',function(data){
  document.getElementById("gameTimer").style = "color:black;";
  document.getElementById("questionStatement").innerHTML = "";
+ document.getElementById("questionImg").src = "";
 
   document.getElementById("gameTimer").innerHTML = "The Next Problem Will Start Soon";
 });
@@ -145,7 +150,6 @@ socket.on('showProblem',function(data){
 });
 socket.on('showImage',function(data){
   document.getElementById("questionImg").src = data;
-
 });
 function joinGame(gameNum){
   socket.emit('joinGame',gameNum);
@@ -156,12 +160,21 @@ socket.on('joinedGame',function(data){
   showGame();
   document.getElementById("gameTimer").innerHTML = "";
   document.getElementById("questionStatement").innerHTML = "";
+  document.getElementById("questionImg").src = "";
+
 
 })
 socket.on('leaveRoom',function(data){
   hideGame();
   showMenu();
 })
+socket.on('gameOver',function(data){
+  document.getElementById("questionStatement").innerHTML = "Game Over";
+  document.getElementById("questionImg").src = "";
+  document.getElementById("gameTimer").innerHTML = "";
+
+
+});
 
 function hideMenu(){
   $("#menu").hide();
