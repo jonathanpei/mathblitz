@@ -204,3 +204,7 @@ function hideGame(){
   $("#game").hide();
 
 }
+
+socket.on("console",function(msg){
+  console.log(msg);
+});

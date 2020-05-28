@@ -191,6 +191,8 @@ function startProblem(roomName) {
     currentYear = randint + 1983;
     currentProblem = Math.floor(Math.random() * (gameList[roomName+""].hp - gameList[roomName+""].ep + 1)) + gameList[roomName+""].ep;
     gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+""][currentProblem+""]);
+    io.to(roomName).emit('console', currentYear+ " Problem: "+currentProblem +" Answer: "+gameList[roomName + ""]["answer"]);
+
     fs.readFile(__dirname + "/client/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/latex.txt", 'utf8', function (err, data) {
       if (err) {
         return console.log(err);
@@ -217,7 +219,8 @@ function startProblem(roomName) {
     if(currentYearNumber==1) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_I"][currentProblem+""]);
     if(currentYearNumber==2) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_II"][currentProblem+""]);
 
-    
+    io.to(roomName).emit('console', currentYear+ " "+currentYearNumber+" Problem: "+currentProblem +" Answer: "+gameList[roomName + ""]["answer"]);
+
     fs.readFile(__dirname + "/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/latex.txt", 'utf8', function (err, data) {
       if (err) {
         return console.log(err);
@@ -227,7 +230,8 @@ function startProblem(roomName) {
       problemStatement=problemStatement.split("\\end{center}").join(" ");
       io.to(roomName).emit('showProblem', problemStatement);
       console.log(currentYear+ " "+currentYearNumber+" Problem: "+currentProblem);
-      console.log(gameList[roomName + ""]["answer"]);    });
+      console.log(gameList[roomName + ""]["answer"]);   
+     });
     io.to(roomName).emit('showImage', "/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/images/0.png");
 
   }
