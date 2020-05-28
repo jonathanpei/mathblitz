@@ -18,7 +18,7 @@
       Well, here you are, <span id="putNameHere"></span>. Here's what you can do:<br />
       <form onsubmit="return false" id="createGameForm">
         <button type="submit" id="createGame">Create Game</button>
-        <input id="gameName" placeholder="Game Name" />
+        <input autocomplete = "off" id="gameName" placeholder="Game Name" />
       </form>
       <div class="leftSide">
         <section id="games">
@@ -46,14 +46,14 @@
         </section>
       </div>
       <form onsubmit="return false" id="ansForm">
-        <input id="ansBox" />
+        <input autocomplete="off" id="ansBox" />
         <button type="submit">Submit</button>
       </form>
     </div>
     <br />
     <section id="chatBox"></section>
     <form onsubmit="return false" id="chatForm">
-      <input id="message" />
+      <input autocomplete="off" id="message" />
       <button type="submit">Send</button>
     </form>
     <br /><br />
