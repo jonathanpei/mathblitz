@@ -19,6 +19,8 @@ function promptUser () {
   let person = null;
   console.log(document.cookie);
   if (getCookie("name") != "") {
+    socket.emit("nameSet","");
+
     putName();
     return;
   }
@@ -34,6 +36,7 @@ function promptUser () {
     }
   }
   setCookie("name",person,30);
+  socket.emit("nameSet","");
   location.reload();
 }
 
@@ -92,6 +95,21 @@ socket.on('addGames',function(data){
   for(var key in data){
     if(data.hasOwnProperty(key)){
       $("#games").append("<button class='gameBtn' onclick='joinGame("+key+")'>"+data[key+""]["name"]+"</button>")
+    }
+  }
+});
+socket.on('playerList',function(data){
+  $("#names").empty();
+  for(var i = 0; i<data.length; i++){
+    $("#names").append("<p>"+data[i].name+"</p>");
+
+  }
+});
+socket.on('universalPlayerList',function(data){
+  $("#universalNames").empty();
+  for(var key in data){
+    if(data.hasOwnProperty(key) && data[key+""].room=="menu"){
+      $("#universalNames").append("<p>"+data[key+""].name+"</p>");
     }
   }
 });

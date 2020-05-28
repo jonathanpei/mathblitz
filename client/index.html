@@ -17,33 +17,48 @@
     <div id="menu">
       Well, here you are, <span id="putNameHere"></span>. Here's what you can do:<br />
       <form onsubmit="return false" id="createGameForm">
-        <button type = "submit" id="createGame">Create Game</button>
-        <input id="gameName" placeholder="Game Name"/>
+        <button type="submit" id="createGame">Create Game</button>
+        <input id="gameName" placeholder="Game Name" />
       </form>
-      <section id="games">
+      <div class="leftSide">
+        <section id="games">
 
-      </section>
+        </section>
+      </div>
+      <div class = "rightSide">
+        <section id="universalNames">
+
+        </section>
+      </div>
     </div>
+
     <div style="display:none;" id="game">
       <button id="leave">Leave</button>
-      <section id="question">
+      <br />
+      <div class="leftSide">
+        <section id="question">
 
-      </section>
+        </section>
+      </div>
+      <div class="rightSide">
+        <section id="names">
 
+        </section>
+      </div>
       <form onsubmit="return false" id="ansForm">
-        <input id="ansBox"/>
+        <input id="ansBox" />
         <button type="submit">Submit</button>
       </form>
     </div>
-    <br/>
+    <br />
     <section id="chatBox"></section>
-    <form onsubmit="return false"id="chatForm">
-      <input id="message"/>
+    <form onsubmit="return false" id="chatForm">
+      <input id="message" />
       <button type="submit">Send</button>
     </form>
     <br /><br />
 
-  <script src="main.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
