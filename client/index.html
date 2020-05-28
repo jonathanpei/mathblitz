@@ -9,10 +9,9 @@
   <link rel="stylesheet" type="text/css" media="screen" href="ios.css" />
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script type="text/javascript"
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<script type="text/x-mathjax-config">
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
       inlineMath: [ ['$','$'], ["\[","\]"] ],
@@ -28,19 +27,27 @@
       Well, here you are, <span id="putNameHere"></span>. Here's what you can do:<br />
       <button class="collapsible">Game Options</button>
       <div class="content" id="gameForm">
-        <form onsubmit="return false" id="createGameForm">
-          <p>Game Name</p>
-          <input autocomplete="off" value= "My Game" id="gameName" placeholder="Game Name" />
-          <br/>
-          <p>Time Limit</p>
-          <input autocomplete="off" value = "60" id="gameTimeLimit" min="1" max="600"type="number" />
-          <br/>
-          <p>Problems</p>
-          <br/>
-          <input autocomplete="off" value = "10" id="gameProblems" min="1" max="50"type="number" />
-          <button type="submit" id="createGame">Create Game</button>
+        <section style="overflow-x: scroll;">
+          <form onsubmit="return false" id="createGameForm">
+            <p>Game Name</p>
+            <input autocomplete="off" value="My Game" id="gameName" placeholder="Game Name" />
+            <br />
+            <p>Time Limit</p>
+            <input autocomplete="off" value="60" id="gameTimeLimit" min="1" max="600" type="number" />
+            <br />
+            <p>Problems</p>
+            <br />
+            <input autocomplete="off" value="8" id="gameProblems" min="1" max="50" type="number" />
+            <p>Easiest Problem</p>
+            <br />
+            <input autocomplete="off" value="1" id="ep" min="1" max="15" type="number" />
+            <p>Hardest Problem</p>
+            <br />
+            <input autocomplete="off" value="15" id="hp" min="1" max="15" type="number" />
+            <button type="submit" id="createGame">Create Game</button>
 
-        </form>
+          </form>
+        </section>
       </div>
       <div class="leftSide">
         <section id="games">
@@ -74,7 +81,7 @@
         <div class="leftSide">
           <section id="question">
             <p id="questionStatement"></p>
-            <img alt = "" style= "width:80%; height:auto;" id="questionImg" src=""/>
+            <img alt="" style="width:80%; height:auto;" id="questionImg" src="" />
           </section>
         </div>
         <div class="rightSide">
@@ -100,19 +107,19 @@
     <script>
       var coll = document.getElementsByClassName("collapsible");
       var i;
-      
+
       for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
+        coll[i].addEventListener("click", function () {
           this.classList.toggle("active");
           var content = this.nextElementSibling;
-          if (content.style.maxHeight){
+          if (content.style.maxHeight) {
             content.style.maxHeight = null;
           } else {
             content.style.maxHeight = content.scrollHeight + "px";
-          } 
+          }
         });
       }
-      </script>
+    </script>
 </body>
 
 </html>

@@ -74,10 +74,23 @@ form.addEventListener('submit', function(e) {
 $("#createGame").click(function(){
   if(document.getElementById("gameTimeLimit").value<1 || document.getElementById("gameTimeLimit").value>600) document.getElementById("gameTimeLimit").value = 60;
   if(document.getElementById("gameProblems").value<1 || document.getElementById("gameProblems").value>50) document.getElementById("gameProblems").value = 10;
+  
+  if(document.getElementById("ep").value<1 || document.getElementById("ep").value>15) {
+    document.getElementById("ep").value = 1;
+  }
+  if(document.getElementById("hp").value<1 || document.getElementById("hp").value>15) {
+    document.getElementById("hp").value = 15;
+  }
+  if(document.getElementById("hp").value<document.getElementById("ep").value) {
+    document.getElementById("ep").value = 1; document.getElementById("hp").value = 15;
+  }
   socket.emit('newGame',{
     name:document.getElementById("gameName").value,
     timeLimit:document.getElementById("gameTimeLimit").value,
-    problems: document.getElementById("gameProblems").value
+    problems: document.getElementById("gameProblems").value,
+    ep: document.getElementById("ep").value,
+    hp: document.getElementById("hp").value
+
   });
 });
 $("#start").click(function(){
