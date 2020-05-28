@@ -20,8 +20,7 @@ function promptUser () {
   console.log(document.cookie);
   if (getCookie("name") != "") {
     socket.emit("nameSet","")
-
-
+    setCookie("name",getCookie("name"),30);
     putName();
     return;
   }
@@ -37,6 +36,7 @@ function promptUser () {
     }
   }
   setCookie("name",person,30);
+  setCookie("inGame","false",30);
   location.reload();
 }
 
@@ -72,6 +72,10 @@ form.addEventListener('submit', function(e) {
   input.value = '';
 });
 $("#createGame").click(function(){
+  if (getCookie("inGame") == "true") {
+    inGame();
+    return;
+  }
   if(document.getElementById("gameTimeLimit").value<1 || document.getElementById("gameTimeLimit").value>600) document.getElementById("gameTimeLimit").value = 60;
   if(document.getElementById("gameProblems").value<1 || document.getElementById("gameProblems").value>50) document.getElementById("gameProblems").value = 10;
 
@@ -85,6 +89,7 @@ $("#createGame").click(function(){
     document.getElementById("ep").value = 1; document.getElementById("hp").value = 15;
   }
   document.getElementById("start").style.display = "inline-block";
+  setCookie("inGame","true",30);
   socket.emit('newGame',{
     name:document.getElementById("gameName").value,
     timeLimit:document.getElementById("gameTimeLimit").value,
@@ -99,6 +104,7 @@ $("#start").click(function(){
   document.getElementById("start").style.display = "none";
 });
 $("#leave").click(function(){
+  setCookie("inGame","false",30);
   socket.emit('leaveRoom',0);
 });
 $("#submitAns").click(function(){
@@ -119,6 +125,9 @@ socket.on('message', function(text) {
 
   container.scrollTop = container.scrollHeight;
 });
+window.onbeforeunload = function(e) {
+    setCookie("inGame","false",30);
+};
 socket.on('addGames',function(data){
   $("#games").empty();
   for(var key in data){
@@ -166,7 +175,17 @@ socket.on('showImage',function(data){
     document.getElementById("questionImg").src = data;
 });
 function joinGame(gameNum){
+  if(getCookie("inGame") == "true") {
+    inGame();
+    return;
+  }
+  setCookie("inGame","true",30);
   socket.emit('joinGame',gameNum);
+}
+
+function inGame() {
+  window.alert("You're already in a game! Please hunt around your tabs and check if you're in a game.");
+  return;
 }
 
 socket.on('joinedGame',function(data){
