@@ -286,12 +286,13 @@ function startProblem(roomName) {
 
     }
     var numOfPlayers = gameList[roomName+""].players.length;
+    var peopleAnswered = 0;
     for(var i=0; i<gameList[roomName+""].players.length; i++){
       if(gameList[roomName+""].players[i].answered==true){
-        numOfPlayers--;
+        peopleAnswered++;
       }
     }
-    if(numOfPlayers==0){
+    if(numOfPlayers==peopleAnswered){
       clearTimeout(stopTimer);
       clearInterval(gameTimer);
       waitProblem(roomName);
