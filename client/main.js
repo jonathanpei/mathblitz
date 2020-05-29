@@ -91,6 +91,10 @@ $("#createGame").click(function(){
   if(document.getElementById("hp").value<document.getElementById("ep").value) {
     document.getElementById("ep").value = 1; document.getElementById("hp").value = 15;
   }
+  if(document.getElementById("correctAnswers").value<1 || document.getElementById("correctAnswers").value>50) {
+    document.getElementById("correctAnswers").value = 50;
+  }
+  
   document.getElementById("start").style.display = "inline-block";
   setCookie("inGame","true",30);
   socket.emit('newGame',{
@@ -98,7 +102,8 @@ $("#createGame").click(function(){
     timeLimit:document.getElementById("gameTimeLimit").value,
     problems: document.getElementById("gameProblems").value,
     ep: document.getElementById("ep").value,
-    hp: document.getElementById("hp").value
+    hp: document.getElementById("hp").value,
+    ca: document.getElementById("correctAnswers").value
 
   });
 });

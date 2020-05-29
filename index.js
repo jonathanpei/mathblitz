@@ -59,11 +59,12 @@ io.on('connection', function (socket) {
     if(msg.ep<1 || msg.ep>15) msg.ep = 1;
     if(msg.hp<1 || msg.hp>15) msg.hp = 15;
     if(msg.hp<msg.ep) {msg.ep = 1; msg.hp = 15};
+    if(msg.ca<1 || msg.ca>50) msg.ca = 50;
     if(msg.name.trim()==""){
       msg.name = curName+"'s Game";
     }
     console.log(msg);
-    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, ep:parseInt(msg.ep),hp:parseInt(msg.hp),answeringPhase: false, currentProblem: 0,started:false };
+    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, ep:parseInt(msg.ep),hp:parseInt(msg.hp),answeringPhase: false, currentProblem: 0,started:false,ca:msg.ca };
     console.log(gameList);
     io.emit('addGames', gameList);
     socket.emit('joinedGame', 0);
@@ -292,7 +293,7 @@ function startProblem(roomName) {
         peopleAnswered++;
       }
     }
-    if(numOfPlayers==peopleAnswered){
+    if(peopleAnswered>=gameList[roomName+""].ca){
       clearTimeout(stopTimer);
       clearInterval(gameTimer);
       waitProblem(roomName);
