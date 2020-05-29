@@ -285,8 +285,20 @@ function startProblem(roomName) {
       io.to(roomName).emit('clock', 0);
 
     }
+    var numOfPlayers = gameList[roomName+""].players.length;
+    for(var i=0; i<gameList[roomName+""].players.length; i++){
+      if(gameList[roomName+""].players[i].answered==true){
+        numOfPlayers--;
+      }
+    }
+    if(numOfPlayers==0){
+      clearTimeout(stopTimer);
+      clearInterval(gameTimer);
+      waitProblem(roomName);
+    }
+
   }, 10);
-  setTimeout(function () {
+  var stopTimer = setTimeout(function () {
     clearInterval(gameTimer);
     waitProblem(roomName);
   }, gameList[roomName + ""].timeLimit * 1000 + 1000);
