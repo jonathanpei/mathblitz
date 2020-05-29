@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css2?family=Roboto);
 
 main {
   width: 80%;
@@ -65,24 +66,29 @@ button {
 /* All of the buttons - change background-color only */
 #send-button {
   background-color: #f2faff;
+  cursor: pointer;
 }
 
 #createGame {
   margin: auto;
   display: block;
   background-color: #f2faff;
+  cursor: pointer;
 }
 
 #start {
   background-color: #f2faff;
+  cursor: pointer;
 }
 
 #leave {
   background-color: #f2faff;
+  cursor: pointer;
 }
 
 #submitAns {
   background-color: #f2faff;
+  cursor: pointer;
 }
 
 .submitBox {
@@ -227,6 +233,7 @@ button {
 }
 
 tr>td {
+  padding: .1em;
   padding-bottom: 1em;
 }
 
@@ -235,7 +242,14 @@ tr>td {
   color: #4f66c2;
   padding-bottom: 10px;
   border-radius: 5px;
+  font-weight: 700;
 }
+
 body{
   background-color: #f2f4f51c;
+  font-family: roboto;
+}
+
+input {
+  font-family: roboto;
 }

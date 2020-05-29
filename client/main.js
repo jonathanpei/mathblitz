@@ -143,7 +143,7 @@ socket.on('playerList',function(data){
   $("#names").empty();
   $("#names").append("<p class='labeller'>Users online:</p>");
   for(var i = 0; i<data.length; i++){
-    $("#names").append("<p>"+data[i].score+" "+data[i].name+"</p>");
+    $("#names").append("<p><b>"+data[i].name+"</b> - "+data[i].score+"</p>");
 
   }
 });
@@ -152,7 +152,7 @@ socket.on('universalPlayerList',function(data){
   $("#universalNames").append("<p class='labeller'>Users online:</p>");
   for(var key in data){
     if(data.hasOwnProperty(key) && data[key+""].room=="menu"){
-      $("#universalNames").append("<p>"+data[key+""].name+"</p>");
+      $("#universalNames").append("<p><b>"+data[key+""].name+"</b></p>");
     }
   }
 });
