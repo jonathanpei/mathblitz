@@ -64,13 +64,13 @@ button {
 
 /* All of the buttons - change background-color only */
 #send-button {
-  background-color: #CDE8FA;
+  background-color: #f2faff;
 }
 
 #createGame {
   margin: auto;
   display: block;
-  background-color: #AEF6FF;
+  background-color: #f0fefb;
 }
 
 #start {
@@ -231,7 +231,7 @@ tr>td {
 }
 
 .labeller {
-  background-color: #C7F0F0;
+  background-color: #eafbfb;
   color: #4f66c2;
   padding-bottom: 10px;
   border-radius: 5px;
