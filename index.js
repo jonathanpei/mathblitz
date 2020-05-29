@@ -222,6 +222,8 @@ function UrlExists(url) {
 }
 
 function startProblem(roomName) {
+  io.emit('addGames', gameList);
+
   if (!roomStillOpen(roomName)) return false;
 
   var randint = Math.floor(Math.random() * 58);
