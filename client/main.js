@@ -257,3 +257,6 @@ socket.on('noImgSetup',function(data){
 socket.on("console",function(msg){
   console.log(msg);
 });
+
+
+

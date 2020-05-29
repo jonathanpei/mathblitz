@@ -21,7 +21,7 @@
 </script>
 </head>
 
-<body onload="promptUser()">
+<body onload="promptUser(); modalDraggable();">
   <main>
     <div id="menu">
       Well, here you are, <span id="putNameHere"></span>. Here's what you can do:<br />
@@ -30,7 +30,8 @@
       </div>
       <div id="myModal" class="modal">
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="modal-content" id="gameOptions">
+        
             <span class="close">&times;</span><br /><br />
 
             <form onsubmit="return false" id="createGameForm" style="display: inline; text-align: left;">
