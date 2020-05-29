@@ -138,6 +138,8 @@ window.onbeforeunload = function(e) {
 };
 socket.on('addGames',function(data){
   $("#games").empty();
+  $("#games").append("<p class='labeller'>Games in progress:</p>");
+
   for(var key in data){
     if(data.hasOwnProperty(key)){
       $("#games").append("<button class='gameBtn' onclick='joinGame("+key+")'>"+data[key+""]["name"]+"</button>")
