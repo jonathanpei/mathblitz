@@ -166,6 +166,8 @@ io.on('connection', function (socket) {
       gameList[playerList[socket.id + ""].room].started = true;
       waitProblem(playerList[socket.id + ""].room);
     }
+    io.emit('addGames', gameList);
+
   });
   socket.on('submitAns', function (msg) {
     if (playerList[socket.id + ""] === undefined) return;

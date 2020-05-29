@@ -159,7 +159,12 @@ socket.on('addGames',function(data){
 
   for(var key in data){
     if(data.hasOwnProperty(key)){
-      $("#games").append("<button class='gameBtn' onclick='joinGame("+key+")'>"+data[key+""]["name"]+"</button>")
+      var styleProps = "";
+      if(data[key+""].started){
+        styleProps+='background-color:#f1cf91;'
+      }
+      
+      $("#games").append("<button class='gameBtn' style='"+styleProps+" onclick='joinGame("+key+")'>"+data[key+""]["name"]+"</button>")
     }
   }
 });
