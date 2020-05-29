@@ -94,7 +94,7 @@ $("#createGame").click(function(){
   if(document.getElementById("correctAnswers").value<1 || document.getElementById("correctAnswers").value>50) {
     document.getElementById("correctAnswers").value = 50;
   }
-  
+
   if(document.getElementById("scoringType").value.trim()!="ranking" && document.getElementById("scoringType").value.trim()!="timing" && document.getElementById("scoringType").value.trim()!="correctAnswer") {
     document.getElementById("scoringType").value= "correctAnswer";
   }
@@ -136,6 +136,19 @@ socket.on('message', function(text) {
   container.appendChild(seperator);
 
   container.scrollTop = container.scrollHeight;
+  /* KaTeX renditioning of LaTeX in the chat box
+  renderMathInElement(document.getElementById("chatBox"),
+      {
+        delimiters: [
+            {left: "\\begin\{equation*\}", right: "\\end\{equation*\}", display: true},
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "[display]", right: "[/display]", display: true},
+            {left: "[inline]", right: "[/inline]", display: false},
+            {left: "\\(", right: "\\)", display: false},
+        ]
+      });*/
 });
 window.onbeforeunload = function(e) {
     setCookie("inGame","false",30);
@@ -182,10 +195,38 @@ socket.on('waiting',function(data){
 
   document.getElementById("gameTimer").innerHTML = "The Next Problem Will Start Soon";
 });
+/* For switching to KaTeX for problem statements as well
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.getElementById("questionStatement"),
+      {
+        delimiters: [
+            {left: "\\begin\{equation*\}", right: "\\end\{equation*\}", display: true},
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "[display]", right: "[/display]", display: true},
+            {left: "[inline]", right: "[/inline]", display: false},
+            {left: "\\(", right: "\\)", display: false},
+        ]
+      });
+});*/
 
 socket.on('showProblem',function(data){
   document.getElementById("questionStatement").innerHTML = data;
-  MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("questionStatement")]);
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("questionStatement")]); //Current MathJax rendition of problems
+  /* For switching to KaTeX for problem statements as well
+  renderMathInElement(document.getElementById("questionStatement"),
+      {
+        delimiters: [
+            {left: "\\begin\{equation*\}", right: "\\end\{equation*\}", display: true},
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "[display]", right: "[/display]", display: true},
+            {left: "[inline]", right: "[/inline]", display: false},
+            {left: "\\(", right: "\\)", display: false},
+        ]
+      });*/
 });
 socket.on('showImage',function(data){
     document.getElementById("questionImg").src = data;
@@ -257,6 +298,3 @@ socket.on('noImgSetup',function(data){
 socket.on("console",function(msg){
   console.log(msg);
 });
-
-
-
