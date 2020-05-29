@@ -236,6 +236,9 @@ function startProblem(roomName) {
       var problemStatement = data;
       problemStatement = problemStatement.split("\\begin{center}").join(" ");
       problemStatement = problemStatement.split("\\end{center}").join(" ");
+      problemStatement = problemStatement.split("<").join(" < ");
+      problemStatement = problemStatement.split(">").join(" > ");
+
       io.to(roomName).emit('showProblem', problemStatement);
       console.log(currentYear + " Problem: " + currentProblem);
       console.log(gameList[roomName + ""]["answer"]);
@@ -258,7 +261,12 @@ function startProblem(roomName) {
       currentYearNumber = 1;
     }
     currentProblem = Math.floor(Math.random() * (gameList[roomName + ""].hp - gameList[roomName + ""].ep + 1)) + gameList[roomName + ""].ep;
-
+    /////// if you want to specify problem for testing
+    /*currentProblem = 1;
+    currentYear = 2016;
+    currentYearNumber=1;
+*/
+    ///////
     if (currentYearNumber == 1) gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + "_I"][currentProblem + ""]);
     if (currentYearNumber == 2) gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + "_II"][currentProblem + ""]);
 
@@ -271,6 +279,8 @@ function startProblem(roomName) {
       var problemStatement = data;
       problemStatement = problemStatement.split("\\begin{center}").join(" ");
       problemStatement = problemStatement.split("\\end{center}").join(" ");
+      problemStatement = problemStatement.split("<").join(" < ");
+      problemStatement = problemStatement.split(">").join(" > ");
       io.to(roomName).emit('showProblem', problemStatement);
       console.log(currentYear + " " + currentYearNumber + " Problem: " + currentProblem);
       console.log(gameList[roomName + ""]["answer"]);
