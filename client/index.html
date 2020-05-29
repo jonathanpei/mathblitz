@@ -53,6 +53,17 @@
                 </tr><tr>
                   <td title="When these amount of people correctly answer, the current problem will end." style="text-align: right;">Maximum Correct Answers</td>
                   <td style="text-align: left;"><input class="createForm" autocomplete="off" value="1" id="correctAnswers" type="number" min="1" max="100" /></td>
+                </tr><tr>
+                  <td style="text-align: right;">Game Mode</td>
+                  <td style="text-align: left;">
+                    <input list="gameMode" class="createForm" autocomplete="off" value="singlePoint" id="gameMode">
+                      <datalist id="gameModeDropdown">
+                        <option value="singlePoint">
+                        <option value="time">
+                        <option value="rank">
+                      </datalist>
+                    </input>
+                  </td>
                 </tr>
               </table>
               <button type="submit" id="createGame">Create Game</button>
@@ -66,8 +77,9 @@
 
 
       <div class="leftSide">
+        <p class="labeller">Games in progress:</p>
         <section id="games">
-          <p class="labeller">Games in progress:</p>
+          
         </section>
       </div>
       <div class="rightSide">
@@ -102,6 +114,7 @@
             <p id="questionStatement"></p>
           </section>
           <section id="img">
+            <p class="labeller">Diagram:</p>
             <img alt="" id="questionImg" src="" class="img-center" />
           </section>
         </div>
