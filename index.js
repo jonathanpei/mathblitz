@@ -170,6 +170,7 @@ io.on('connection', function (socket) {
   socket.on('submitAns', function (msg) {
     if (playerList[socket.id + ""] === undefined) return;
     if (gameList[playerList[socket.id + ""].room] === undefined) return;
+    if(!gameList[playerList[socket.id + ""].room].answeringPhase) return;
     if (parseInt(msg) == gameList[playerList[socket.id + ""].room].answer) {
       for (var i = 0; i < gameList[playerList[socket.id + ""].room].players.length; i++) {
         if (gameList[playerList[socket.id + ""].room].players[i].id == socket.id && gameList[playerList[socket.id + ""].room].players[i].answered == false) {
@@ -315,6 +316,7 @@ function startProblem(roomName) {
       }
     }
     if (peopleAnswered >= gameList[roomName + ""].ca ||peopleAnswered>=numOfPlayers ) {
+      
       clearTimeout(stopTimer);
       clearInterval(gameTimer);
       waitProblem(roomName);
