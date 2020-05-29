@@ -66,6 +66,9 @@ form.addEventListener('submit', function(e) {
   e.preventDefault();
   var input = document.querySelector('#message');
   var text = input.value;
+  if (text == "") {
+    return;
+  }
   var userName = getCookie("name");
   text = userName + ": " + text;
   socket.emit('message', text);
@@ -138,6 +141,7 @@ socket.on('addGames',function(data){
 });
 socket.on('playerList',function(data){
   $("#names").empty();
+  $("#names").append("<p class='labeller'>Users online:</p>");
   for(var i = 0; i<data.length; i++){
     $("#names").append("<p>"+data[i].score+" "+data[i].name+"</p>");
 
@@ -145,6 +149,7 @@ socket.on('playerList',function(data){
 });
 socket.on('universalPlayerList',function(data){
   $("#universalNames").empty();
+  $("#universalNames").append("<p class='labeller'>Users online:</p>");
   for(var key in data){
     if(data.hasOwnProperty(key) && data[key+""].room=="menu"){
       $("#universalNames").append("<p>"+data[key+""].name+"</p>");
