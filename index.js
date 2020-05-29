@@ -222,7 +222,6 @@ function UrlExists(url) {
 }
 
 function startProblem(roomName) {
-  io.emit('addGames', gameList);
 
   if (!roomStillOpen(roomName)) return false;
 
@@ -240,6 +239,9 @@ function startProblem(roomName) {
       var problemStatement = data;
       problemStatement = problemStatement.split("\\begin{center}").join(" ");
       problemStatement = problemStatement.split("\\end{center}").join(" ");
+      problemStatement = problemStatement.split("\\begin{itemize}").join(" ");
+      problemStatement = problemStatement.split("\\end{itemize}").join(" ");
+      problemStatement = problemStatement.split("\\item").join(" ");
       problemStatement = problemStatement.split("<").join(" < ");
       problemStatement = problemStatement.split(">").join(" > ");
 
@@ -266,9 +268,9 @@ function startProblem(roomName) {
     }
     currentProblem = Math.floor(Math.random() * (gameList[roomName + ""].hp - gameList[roomName + ""].ep + 1)) + gameList[roomName + ""].ep;
     /////// if you want to specify problem for testing
-    /*currentProblem = 1;
-    currentYear = 2016;
-    currentYearNumber=1;
+  /*  currentProblem = 11;
+    currentYear = 2010;
+    currentYearNumber=2;
 */
     ///////
     if (currentYearNumber == 1) gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + "_I"][currentProblem + ""]);
@@ -283,6 +285,9 @@ function startProblem(roomName) {
       var problemStatement = data;
       problemStatement = problemStatement.split("\\begin{center}").join(" ");
       problemStatement = problemStatement.split("\\end{center}").join(" ");
+      problemStatement = problemStatement.split("\\begin{itemize}").join(" ");
+      problemStatement = problemStatement.split("\\end{itemize}").join(" ");
+      problemStatement = problemStatement.split("\\item").join(" ");
       problemStatement = problemStatement.split("<").join(" < ");
       problemStatement = problemStatement.split(">").join(" > ");
       io.to(roomName).emit('showProblem', problemStatement);
@@ -337,6 +342,8 @@ function startProblem(roomName) {
     }
 
   }, 10);
+  io.emit('addGames', gameList);
+
   var stopTimer = setTimeout(function () {
     clearInterval(gameTimer);
     waitProblem(roomName);
