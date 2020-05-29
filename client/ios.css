@@ -104,7 +104,7 @@ button {
   height:75px;
   border: solid 1px #e5e5eb;
   border-radius: 10px;
-
+  cursor: pointer;
 }
 
 #img {
