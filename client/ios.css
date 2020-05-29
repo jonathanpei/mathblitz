@@ -70,19 +70,19 @@ button {
 #createGame {
   margin: auto;
   display: block;
-  background-color: #f0fefb;
+  background-color: #f2faff;
 }
 
 #start {
-  background-color: #CDE8FA;
+  background-color: #f2faff;
 }
 
 #leave {
-  background-color: #CDE8FA;
+  background-color: #f2faff;
 }
 
 #submitAns {
-  background-color: #CDE8FA;
+  background-color: #f2faff;
 }
 
 .submitBox {
