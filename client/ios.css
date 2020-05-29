@@ -168,19 +168,20 @@ button {
   width: 20%;
 }
 
-.collapsible {
-  background-color: #777;
-  color: white;
+/*.collapsible {
+  border-radius: 10px;
+  
+  padding: 10px;
+  text-decoration: none;
+  font-size: 16px;
   cursor: pointer;
-  padding: 13px;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
-}
+}*/
 
-.active, .collapsible:hover {
-  background-color: #555;
+#toggleGame{
+  color: #0a93f6;
+  background-color: #f2faff;
+  cursor: pointer;
+
 }
 
 .content {

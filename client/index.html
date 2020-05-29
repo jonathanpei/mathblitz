@@ -25,7 +25,7 @@
   <main>
     <div id="menu">
       Well, here you are, <span id="putNameHere"></span>. Here's what you can do:<br />
-      <button id="toggleGame" style="float:right;" class="collapsible"><center><p style = "font-size: 17px;">Create Game</p></center></button>
+      <button id="toggleGame" style="float:right;"><center><p style = "font-size: 17px;">Create Game</p></center></button>
       <div class="content" id="gameForm">
       </div>
       <div id="myModal" class="modal">
@@ -53,6 +53,15 @@
                 </tr><tr>
                   <td title="When these amount of people correctly answer, the current problem will end." style="text-align: right;">Maximum Correct Answers</td>
                   <td style="text-align: left;"><input class="createForm" autocomplete="off" value="1" id="correctAnswers" type="number" min="1" max="100" /></td>
+                </tr><tr>
+                  <td title="" style="text-align: right;">Scoring</td>
+                  <td style="text-align: left;">
+                    <select class="createForm" id="scoringType">
+                      <option value="correctAnswer">Correct Answer</option>
+                      <option value="ranking">Rank</option>
+                      <option value="timing">Timed</option>
+                    </select>
+                  </td>
                 </tr>
               </table>
               <button type="submit" id="createGame">Create Game</button>

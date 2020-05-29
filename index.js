@@ -12,12 +12,12 @@ app.use(cookieParser());
 server.listen(PORT, function () {
   console.log('Chat server running');
 });
-var answers="";
+var answers = "";
 fs.readFile(__dirname + "/client/answers.txt", 'utf8', function (err, data) {
   if (err) {
     return console.log(err);
   }
-  answers=JSON.parse(data);
+  answers = JSON.parse(data);
 });
 var io = require('socket.io')(server);
 
@@ -56,23 +56,29 @@ io.on('connection', function (socket) {
     if (msg.problems < 1 || msg.problems > 50) msg.problems = 10;
 
 
-    if(msg.ep<1 || msg.ep>15) msg.ep = 1;
-    if(msg.hp<1 || msg.hp>15) msg.hp = 15;
-    if(msg.hp<msg.ep) {msg.ep = 1; msg.hp = 15};
-    if(msg.ca<1 || msg.ca>50) msg.ca = 50;
-    if(msg.name.trim()==""){
-      msg.name = curName+"'s Game";
+    if (msg.ep < 1 || msg.ep > 15) msg.ep = 1;
+    if (msg.hp < 1 || msg.hp > 15) msg.hp = 15;
+    if (msg.hp < msg.ep) { msg.ep = 1; msg.hp = 15 };
+    if (msg.ca < 1 || msg.ca > 50) msg.ca = 50;
+    if (msg.name.trim() == "") {
+      msg.name = curName + "'s Game";
     }
+
+    if (msg.gameType.trim() != "ranking" && msg.gameType.trim() != "timing" && msg.gameType.trim() != "correctAnswer") {
+      msg.gameType = "correctAnswer";
+    }
+
     console.log(msg);
-    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, ep:parseInt(msg.ep),hp:parseInt(msg.hp),answeringPhase: false, currentProblem: 0,started:false,ca:msg.ca };
+    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, ep: parseInt(msg.ep), hp: parseInt(msg.hp), answeringPhase: false, currentProblem: 0, started: false, ca: msg.ca, gameType: msg.gameType, time: 0 };
     console.log(gameList);
     io.emit('addGames', gameList);
     socket.emit('joinedGame', 0);
+
     socket.leave("menu");
     socket.join(gameNumber);
     playerList[socket.id + ""] = { name: curName, room: gameNumber + "" };
 
-    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: curName, answered: false,score: 0 }];
+    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: curName, answered: false, score: 0 }];
     io.to(gameNumber + "").emit('playerList', gameList[gameNumber + ""]["players"]);
 
     gameNumber++;
@@ -88,7 +94,7 @@ io.on('connection', function (socket) {
     socket.emit('joinedGame', 0);
     socket.leave("menu");
     socket.join(msg);
-    gameList[msg + ""]["players"].push({ id: socket.id, name: curName, answered: false, score: 0});
+    gameList[msg + ""]["players"].push({ id: socket.id, name: curName, answered: false, score: 0 });
 
     playerList[socket.id + ""] = { name: curName, room: msg + "" };
 
@@ -156,19 +162,34 @@ io.on('connection', function (socket) {
   });
   socket.on('start', function (msg) {
     if (playerList[socket.id + ""] === undefined) return;
-    if(!gameList[playerList[socket.id+""].room].started){
-      gameList[playerList[socket.id+""].room].started=true;
+    if (!gameList[playerList[socket.id + ""].room].started) {
+      gameList[playerList[socket.id + ""].room].started = true;
       waitProblem(playerList[socket.id + ""].room);
     }
   });
-  socket.on('submitAns',function(msg){
+  socket.on('submitAns', function (msg) {
     if (playerList[socket.id + ""] === undefined) return;
     if (gameList[playerList[socket.id + ""].room] === undefined) return;
-    if(parseInt(msg)==gameList[playerList[socket.id + ""].room].answer){
-      for(var i = 0; i<gameList[playerList[socket.id + ""].room].players.length; i++){
-        if(gameList[playerList[socket.id + ""].room].players[i].id==socket.id && gameList[playerList[socket.id + ""].room].players[i].answered==false){
-          gameList[playerList[socket.id + ""].room].players[i].score++;
-          gameList[playerList[socket.id + ""].room].players[i].answered=true;
+    if (parseInt(msg) == gameList[playerList[socket.id + ""].room].answer) {
+      for (var i = 0; i < gameList[playerList[socket.id + ""].room].players.length; i++) {
+        if (gameList[playerList[socket.id + ""].room].players[i].id == socket.id && gameList[playerList[socket.id + ""].room].players[i].answered == false) {
+          if (gameList[playerList[socket.id + ""].room].gameType == "timing") {
+            gameList[playerList[socket.id + ""].room].players[i].score += gameList[playerList[socket.id + ""].room].timeLimit - gameList[playerList[socket.id + ""].room].time;
+          }
+          else if (gameList[playerList[socket.id + ""].room].gameType == "ranking") {
+            var numOfPlayers =gameList[playerList[socket.id + ""].room].players.length;
+            var peopleAnswered = 0;
+            for (var j = 0; j < gameList[playerList[socket.id + ""].room].players.length; j++) {
+              if (gameList[playerList[socket.id + ""].room].players[j].answered == true) {
+                peopleAnswered++;
+              }
+            }
+            gameList[playerList[socket.id + ""].room].players[i].score+=numOfPlayers-peopleAnswered;
+          }
+          else if (gameList[playerList[socket.id + ""].room].gameType == "correctAnswer") {
+            gameList[playerList[socket.id + ""].room].players[i].score++;
+          }
+          gameList[playerList[socket.id + ""].room].players[i].answered = true;
           break;
         }
       }
@@ -186,15 +207,15 @@ function checkLeaveRoom(roomName) {
 }
 
 function UrlExists(url) {
-    var http = new XMLHttpRequest();
-    http.open('HEAD', url, false);
-    http.send();
-    if (http.status != 404) {
-        return true;
-    }
-    else {
-        return false;
-    }
+  var http = new XMLHttpRequest();
+  http.open('HEAD', url, false);
+  http.send();
+  if (http.status != 404) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 function startProblem(roomName) {
@@ -203,23 +224,23 @@ function startProblem(roomName) {
   var randint = Math.floor(Math.random() * 58);
   if (randint < 17) {
     currentYear = randint + 1983;
-    currentProblem = Math.floor(Math.random() * (gameList[roomName+""].hp - gameList[roomName+""].ep + 1)) + gameList[roomName+""].ep;
-    gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+""][currentProblem+""]);
-    io.to(roomName).emit('console', currentYear+ " Problem: "+currentProblem +" Answer: "+gameList[roomName + ""]["answer"]);
+    currentProblem = Math.floor(Math.random() * (gameList[roomName + ""].hp - gameList[roomName + ""].ep + 1)) + gameList[roomName + ""].ep;
+    gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + ""][currentProblem + ""]);
+    io.to(roomName).emit('console', currentYear + " Problem: " + currentProblem + " Answer: " + gameList[roomName + ""]["answer"]);
 
     fs.readFile(__dirname + "/client/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/latex.txt", 'utf8', function (err, data) {
       if (err) {
         return console.log(err);
       }
       var problemStatement = data;
-      problemStatement=problemStatement.split("\\begin{center}").join(" ");
-      problemStatement=problemStatement.split("\\end{center}").join(" ");
+      problemStatement = problemStatement.split("\\begin{center}").join(" ");
+      problemStatement = problemStatement.split("\\end{center}").join(" ");
       io.to(roomName).emit('showProblem', problemStatement);
-      console.log(currentYear + " Problem: "+currentProblem);
+      console.log(currentYear + " Problem: " + currentProblem);
       console.log(gameList[roomName + ""]["answer"]);
     });
     var url = "https://raw.githubusercontent.com/RadiantCheddar/mathbowl/master/client/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/images/0.png";
-    if(UrlExists(url)) {
+    if (UrlExists(url)) {
       console.log("WORKS");
       io.to(roomName).emit('imgSetup');
       io.to(roomName).emit('showImage', url);
@@ -235,35 +256,35 @@ function startProblem(roomName) {
     } else {
       currentYearNumber = 1;
     }
-    currentProblem = Math.floor(Math.random() * (gameList[roomName+""].hp - gameList[roomName+""].ep + 1)) + gameList[roomName+""].ep;
+    currentProblem = Math.floor(Math.random() * (gameList[roomName + ""].hp - gameList[roomName + ""].ep + 1)) + gameList[roomName + ""].ep;
 
-    if(currentYearNumber==1) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_I"][currentProblem+""]);
-    if(currentYearNumber==2) gameList[roomName + ""]["answer"]=parseInt(answers[currentYear+"_II"][currentProblem+""]);
+    if (currentYearNumber == 1) gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + "_I"][currentProblem + ""]);
+    if (currentYearNumber == 2) gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + "_II"][currentProblem + ""]);
 
-    io.to(roomName).emit('console', currentYear+ " "+currentYearNumber+" Problem: "+currentProblem +" Answer: "+gameList[roomName + ""]["answer"]);
+    io.to(roomName).emit('console', currentYear + " " + currentYearNumber + " Problem: " + currentProblem + " Answer: " + gameList[roomName + ""]["answer"]);
 
     fs.readFile(__dirname + "/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/latex.txt", 'utf8', function (err, data) {
       if (err) {
         return console.log(err);
       }
       var problemStatement = data;
-      problemStatement=problemStatement.split("\\begin{center}").join(" ");
-      problemStatement=problemStatement.split("\\end{center}").join(" ");
+      problemStatement = problemStatement.split("\\begin{center}").join(" ");
+      problemStatement = problemStatement.split("\\end{center}").join(" ");
       io.to(roomName).emit('showProblem', problemStatement);
-      console.log(currentYear+ " "+currentYearNumber+" Problem: "+currentProblem);
+      console.log(currentYear + " " + currentYearNumber + " Problem: " + currentProblem);
       console.log(gameList[roomName + ""]["answer"]);
-     });
+    });
 
-     var url = "https://raw.githubusercontent.com/RadiantCheddar/mathbowl/master/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/images/0.png";
-     if(UrlExists(url)) {
-       io.to(roomName).emit('imgSetup');
-       io.to(roomName).emit('showImage', url);
-       console.log("WORKS");
-     }
-     else {
-       io.to(roomName).emit('noImgSetup');
-       console.log("Bruh this url no here rn");
-     }
+    var url = "https://raw.githubusercontent.com/RadiantCheddar/mathbowl/master/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/images/0.png";
+    if (UrlExists(url)) {
+      io.to(roomName).emit('imgSetup');
+      io.to(roomName).emit('showImage', url);
+      console.log("WORKS");
+    }
+    else {
+      io.to(roomName).emit('noImgSetup');
+      console.log("Bruh this url no here rn");
+    }
   }
 
   gameList[roomName + ""].answeringPhase = true;
@@ -277,7 +298,7 @@ function startProblem(roomName) {
     var elapsed = (d.getTime() - startingTime) / 1000;
     elapsed = (Math.round(elapsed * 100) / 100);
     if (!roomStillOpen(roomName)) return;
-
+    gameList[roomName + ""].time = elapsed;
     if (roomStillOpen(roomName) && elapsed < gameList[roomName + ""].timeLimit) {
       io.to(roomName).emit('clock', gameList[roomName + ""].timeLimit - elapsed);
     }
@@ -286,14 +307,14 @@ function startProblem(roomName) {
       io.to(roomName).emit('clock', 0);
 
     }
-    var numOfPlayers = gameList[roomName+""].players.length;
+    var numOfPlayers = gameList[roomName + ""].players.length;
     var peopleAnswered = 0;
-    for(var i=0; i<gameList[roomName+""].players.length; i++){
-      if(gameList[roomName+""].players[i].answered==true){
+    for (var i = 0; i < gameList[roomName + ""].players.length; i++) {
+      if (gameList[roomName + ""].players[i].answered == true) {
         peopleAnswered++;
       }
     }
-    if(peopleAnswered>=gameList[roomName+""].ca){
+    if (peopleAnswered >= gameList[roomName + ""].ca ||peopleAnswered>=numOfPlayers ) {
       clearTimeout(stopTimer);
       clearInterval(gameTimer);
       waitProblem(roomName);
@@ -317,8 +338,8 @@ function waitProblem(roomName) {
   }
   else {
 
-    for(var i=0; i<gameList[roomName+""].players.length; i++){
-      gameList[roomName+""].players[i].answered=false;
+    for (var i = 0; i < gameList[roomName + ""].players.length; i++) {
+      gameList[roomName + ""].players[i].answered = false;
     }
 
 

@@ -95,6 +95,9 @@ $("#createGame").click(function(){
     document.getElementById("correctAnswers").value = 50;
   }
   
+  if(document.getElementById("scoringType").value.trim()!="ranking" && document.getElementById("scoringType").value.trim()!="timing" && document.getElementById("scoringType").value.trim()!="correctAnswer") {
+    document.getElementById("scoringType").value= "correctAnswer";
+  }
   document.getElementById("start").style.display = "inline-block";
   setCookie("inGame","true",30);
   socket.emit('newGame',{
@@ -103,7 +106,8 @@ $("#createGame").click(function(){
     problems: document.getElementById("gameProblems").value,
     ep: document.getElementById("ep").value,
     hp: document.getElementById("hp").value,
-    ca: document.getElementById("correctAnswers").value
+    ca: document.getElementById("correctAnswers").value,
+    gameType: document.getElementById("scoringType").value
 
   });
 });
