@@ -247,6 +247,10 @@ tr>td {
   font-weight: 700;
 }
 
+.gameBtn {
+  cursor; pointer;
+}
+
 body{
   background-color: #f2f4f51c;
   font-family: roboto;
