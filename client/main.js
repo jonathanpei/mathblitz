@@ -2,7 +2,7 @@ var socket = io();
 var currentYear = 0;
 var currentYearNumber = 0;
 var currentProblem = 0;
-
+var currentProblemInfo = 0;
 function setCookie(cname,cvalue,exdays) {
   var d = new Date();
   d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -172,6 +172,9 @@ socket.on('addGames',function(data){
     }
   }
 });
+socket.on('currentProblemInfo',function(data){
+  currentProblemInfo=data;
+})
 socket.on('playerList',function(data){
   $("#names").empty();
   $("#names").append("<p class='labeller'>Users online:</p>");
@@ -207,7 +210,7 @@ document.getElementById("reportIssue").onclick = function () {
   if (document.getElementById("issue").value == "") {
     return;
   }
-  let toPrint = currentYear + " AIME " + currentYearNumber + " Problem " + currentProblem + ". User had following complaint: " + document.getElementById("issue").value;
+  let toPrint = currentProblemInfo.currentYear + " AIME " + currentProblemInfo.currentYearNumber + " Problem " + currentProblemInfo.currentProblem + ". User had following complaint: " + document.getElementById("issue").value;
   socket.emit('reportError',toPrint);
 }
 

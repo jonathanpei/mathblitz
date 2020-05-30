@@ -7,6 +7,7 @@ var http = require('http');
 var server = http.Server(app);
 var fs = require('fs');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 app.use(express.static('client'));
 app.use(cookieParser());
 server.listen(PORT, function () {
@@ -92,6 +93,11 @@ io.on('connection', function (socket) {
   });
   socket.on('reportError', function (msg) {
     console.log(msg);
+    if (playerList[socket.id + ""] === undefined) return;
+    if (gameList[playerList[socket.id + ""].room] === undefined) return;
+    fs.appendFile("report_logs.txt", msg+"\n",function(err){
+        console.log(err);
+    });
   });
   socket.on('joinGame', function (msg) {
     socket.emit('joinedGame', 0);
@@ -230,6 +236,7 @@ function startProblem(roomName) {
   var randint = Math.floor(Math.random() * 58);
   if (randint < 17) {
     currentYear = randint + 1983;
+    currentYearNumber = 0;
     currentProblem = Math.floor(Math.random() * (gameList[roomName + ""].hp - gameList[roomName + ""].ep + 1)) + gameList[roomName + ""].ep;
     gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + ""][currentProblem + ""]);
     io.to(roomName).emit('console', currentYear + " Problem: " + currentProblem + " Answer: " + gameList[roomName + ""]["answer"]);
@@ -248,6 +255,8 @@ function startProblem(roomName) {
       problemStatement = problemStatement.split(">").join(" > ");
 
       io.to(roomName).emit('showProblem', problemStatement);
+      io.to(roomName).emit('currentProblemInfo',{currentYear:currentYear,currentYearNumber:currentYearNumber,currentProblem,currentProblem});
+
       console.log(currentYear + " Problem: " + currentProblem);
       console.log(gameList[roomName + ""]["answer"]);
     });
@@ -293,6 +302,7 @@ function startProblem(roomName) {
       problemStatement = problemStatement.split("<").join(" < ");
       problemStatement = problemStatement.split(">").join(" > ");
       io.to(roomName).emit('showProblem', problemStatement);
+      io.to(roomName).emit('currentProblemInfo',{currentYear:currentYear,currentYearNumber:currentYearNumber,currentProblem,currentProblem});
       console.log(currentYear + " " + currentYearNumber + " Problem: " + currentProblem);
       console.log(gameList[roomName + ""]["answer"]);
     });
