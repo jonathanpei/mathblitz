@@ -171,7 +171,7 @@ socket.on('addGames',function(data){
         styleProps+='background-color:#f1cf91;'
       }
 
-      $("#games").append("<button class='gameBtn' style='"+styleProps+" onclick='joinGame("+key+")'>"+data[key+""]["name"]+"<br>"+data[key+""]["currentProblem"]+"/"+data[key+""]["problems"]+"</button>")
+      $("#games").append("<button class='gameBtn' style='"+styleProps+"' onclick='joinGame("+key+")'>"+data[key+""]["name"]+"<br>"+data[key+""]["currentProblem"]+"/"+data[key+""]["problems"]+"</button>")
     }
   }
 });
