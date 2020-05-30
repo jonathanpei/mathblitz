@@ -90,6 +90,9 @@ io.on('connection', function (socket) {
     io.to(rooms[0]).emit('message', msg);
 
   });
+  socket.on('reportError', function (msg) {
+    console.log(msg);
+  });
   socket.on('joinGame', function (msg) {
     socket.emit('joinedGame', 0);
     socket.leave("menu");
@@ -100,7 +103,6 @@ io.on('connection', function (socket) {
 
     io.to(msg).emit('playerList', gameList[msg + ""]["players"]);
     io.emit('universalPlayerList', playerList);
-
   });
   socket.on('leaveRoom', function (msg) {
     var rooms = Object.keys(socket.rooms).filter(item => item != socket.id);
@@ -330,7 +332,7 @@ function startProblem(roomName) {
       }
     }
     if (peopleAnswered >= gameList[roomName + ""].ca ||peopleAnswered>=numOfPlayers ) {
-      
+
       clearTimeout(stopTimer);
       clearInterval(gameTimer);
       waitProblem(roomName);

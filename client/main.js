@@ -1,4 +1,7 @@
 var socket = io();
+var currentYear = 0;
+var currentYearNumber = 0;
+var currentProblem = 0;
 
 function setCookie(cname,cvalue,exdays) {
   var d = new Date();
@@ -75,6 +78,7 @@ form.addEventListener('submit', function(e) {
   input.value = '';
 });
 $("#createGame").click(function(){
+  document.body.style.overflowY = "auto";
   if (getCookie("inGame") == "true") {
     inGame();
     return;
@@ -163,7 +167,7 @@ socket.on('addGames',function(data){
       if(data[key+""].started){
         styleProps+='background-color:#f1cf91;'
       }
-      
+
       $("#games").append("<button class='gameBtn' style='"+styleProps+" onclick='joinGame("+key+")'>"+data[key+""]["name"]+"<br>"+data[key+""]["currentProblem"]+"/"+data[key+""]["problems"]+"</button>")
     }
   }
@@ -193,11 +197,25 @@ socket.on('clock',function(data){
   document.getElementById("gameTimer").innerHTML = "Timer: "+data.toFixed(2);
 });
 
+function collectProblem () {
+  //somehow get the problem here
+}
+
+document.getElementById("reportIssue").onclick = function () {
+  document.getElementById("myModal2").style.display = "none";
+  document.body.style.overflowY = "auto";
+  if (document.getElementById("issue").value == "") {
+    return;
+  }
+  let toPrint = currentYear + " AIME " + currentYearNumber + " Problem " + currentProblem + ". User had following complaint: " + document.getElementById("issue").value;
+  socket.emit('reportError',toPrint);
+}
+
 socket.on('waiting',function(data){
  document.getElementById("gameTimer").style = "color:black;";
  document.getElementById("questionStatement").innerHTML = "";
  document.getElementById("questionImg").src = "";
-
+ document.getElementById("reportIssueButton").style.display = "none";
   document.getElementById("gameTimer").innerHTML = "The Next Problem Will Start Soon";
 });
 /* For switching to KaTeX for problem statements as well
@@ -218,6 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 socket.on('showProblem',function(data){
   document.getElementById("questionStatement").innerHTML = data;
+  document.getElementById("reportIssueButton").style.display = "inline-block";
   MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("questionStatement")]); //Current MathJax rendition of problems
   /* For switching to KaTeX for problem statements as well
   renderMathInElement(document.getElementById("questionStatement"),
@@ -261,6 +280,7 @@ socket.on('joinedGame',function(data){
 })
 socket.on('leaveRoom',function(data){
   hideGame();
+  document.getElementById("reportIssueButton").style.display = "none";
   showMenu();
 })
 socket.on('gameOver',function(data){
