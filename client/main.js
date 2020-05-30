@@ -81,6 +81,8 @@ form.addEventListener('submit', function(e) {
   input.value = '';
 });
 $("#createGame").click(function(){
+  var easiestProblem = parseInt(document.getElementById("ep").value);
+  var hardestProblem = parseInt(document.getElementById("hp").value);
   document.body.style.overflowY = "auto";
   if (getCookie("inGame") == "true") {
     inGame();
@@ -89,16 +91,20 @@ $("#createGame").click(function(){
   if(document.getElementById("gameTimeLimit").value<1 || document.getElementById("gameTimeLimit").value>600) document.getElementById("gameTimeLimit").value = 60;
   if(document.getElementById("gameProblems").value<1 || document.getElementById("gameProblems").value>50) document.getElementById("gameProblems").value = 10;
 
-  if(document.getElementById("ep").value<1 || document.getElementById("ep").value>15) {
+  if(easiestProblem<1 || easiestProblem.value>15) {
+    console.log("issue 1");
     document.getElementById("ep").value = 1;
   }
-  if(document.getElementById("hp").value<1 || document.getElementById("hp").value>15) {
+  if(hardestProblem<1 || hardestProblem>15) {
+    console.log("issue 2");
     document.getElementById("hp").value = 15;
   }
-  if(document.getElementById("hp").value<document.getElementById("ep").value) {
-    document.getElementById("ep").value = 1; document.getElementById("hp").value = 15;
+  if(hardestProblem<easiestProblem) {
+    console.log("issue 3");
+    document.getElementById("ep").value = 1; 
+    document.getElementById("hp").value = 15;
   }
-  if(document.getElementById("correctAnswers").value<1 || document.getElementById("correctAnswers").value>50) {
+  if(parseInt(document.getElementById("correctAnswers").value)<1 || parseInt(document.getElementById("correctAnswers").value)>50) {
     document.getElementById("correctAnswers").value = 50;
   }
 
@@ -107,12 +113,14 @@ $("#createGame").click(function(){
   }
   document.getElementById("start").style.display = "inline-block";
   setCookie("inGame","true",30);
+  easiestProblem = parseInt(document.getElementById("ep").value);
+  hardestProblem = parseInt(document.getElementById("hp").value);
   socket.emit('newGame',{
     name:document.getElementById("gameName").value,
     timeLimit:document.getElementById("gameTimeLimit").value,
     problems: document.getElementById("gameProblems").value,
-    ep: document.getElementById("ep").value,
-    hp: document.getElementById("hp").value,
+    ep: easiestProblem,
+    hp: hardestProblem,
     ca: document.getElementById("correctAnswers").value,
     gameType: document.getElementById("scoringType").value
 
