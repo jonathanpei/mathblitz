@@ -37,30 +37,6 @@
 <body onload="promptUser();">
   <main>
 
-    <div class="buttons" id="reportIssueButton" style="display: none;">
-      <button class="blob-btn">
-        <img src="https://i.ya-webdesign.com/images/red-laser-blast-png-2.png" style="height: 20px; width: auto;"> Report Issue
-        <span class="blob-btn__inner">
-          <span class="blob-btn__blobs">
-            <span class="blob-btn__blob"></span>
-            <span class="blob-btn__blob"></span>
-            <span class="blob-btn__blob"></span>
-            <span class="blob-btn__blob"></span>
-          </span>
-        </span>
-      </button>
-      <br/>
-
-      <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-        <defs>
-          <filter id="goo">
-            <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="10"></feGaussianBlur>
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 21 -7" result="goo"></feColorMatrix>
-            <feBlend in2="goo" in="SourceGraphic" result="mix"></feBlend>
-          </filter>
-        </defs>
-      </svg>
-    </div>
     <div id="menu">
       Well, here you are, <span id="putNameHere"></span>. Here's what you can do:<br />
       <button id="toggleGame" style="float:right;"><center><p style = "font-size: 17px;">Create Game</p></center></button>
@@ -186,6 +162,31 @@
       <input class="submitBox" autocomplete="off" id="message" />
       <button id="send-button" type="submit">Chat</button>
     </form>
+
+        <div class="buttons" id="reportIssueButton" style="display: none;">
+          <button class="blob-btn">
+            <img src="https://i.ya-webdesign.com/images/red-laser-blast-png-2.png" style="height: 20px; width: auto;"> Report Issue
+            <span class="blob-btn__inner">
+              <span class="blob-btn__blobs">
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+              </span>
+            </span>
+          </button>
+          <br/>
+
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <defs>
+              <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="10"></feGaussianBlur>
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 21 -7" result="goo"></feColorMatrix>
+                <feBlend in2="goo" in="SourceGraphic" result="mix"></feBlend>
+              </filter>
+            </defs>
+          </svg>
+        </div>
     <br /><br />
     <script src="main.js"></script>
     <script>
