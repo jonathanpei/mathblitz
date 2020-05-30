@@ -54,7 +54,6 @@ io.on('connection', function (socket) {
     playerList[socket.id + ""] = { name: curName, room: "menu" };
     io.emit('universalPlayerList', playerList);
 
-
   });
 
   io.emit('universalPlayerList', playerList);
