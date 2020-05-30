@@ -96,7 +96,7 @@ io.on('connection', function (socket) {
     if (playerList[socket.id + ""] === undefined) return;
     if (gameList[playerList[socket.id + ""].room] === undefined) return;
     fs.appendFile("report_logs.txt", msg+"\n",function(err){
-        console.log(err);
+       // console.log(err);
     });
   });
   socket.on('joinGame', function (msg) {
