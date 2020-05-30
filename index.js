@@ -5,8 +5,19 @@ var cookieParser = require('cookie-parser');
 var cookie = require('cookie');
 var http = require('http');
 var server = http.Server(app);
+var nodemailer = require('nodemailer');
 var fs = require('fs');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'aimecdrerrorreports@gmail.com',
+    pass: 'aimecdr12345'
+  }
+});
+
+
 
 app.use(express.static('client'));
 app.use(cookieParser());
@@ -95,8 +106,18 @@ io.on('connection', function (socket) {
     console.log(msg);
     if (playerList[socket.id + ""] === undefined) return;
     if (gameList[playerList[socket.id + ""].room] === undefined) return;
-    fs.appendFile("report_logs.txt", msg+"\n",function(err){
-       // console.log(err);
+    var mailOptions = {
+      from: 'aimecdrerrorreports@gmail.com',
+      to: 'aimecdrerrorreports@gmail.com',
+      subject: msg,
+      text: msg
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
     });
   });
   socket.on('joinGame', function (msg) {
