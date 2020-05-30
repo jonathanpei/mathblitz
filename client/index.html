@@ -190,9 +190,11 @@
 
       // When the user clicks the button, open the modal
       btn.onclick = function() {
+        if (getCookie("hasReported") == "true") {
+          return;
+        }
         modal2.style.display = "block";
         document.body.style.overflowY = "hidden";
-        collectProblem();
       }
 
       // When the user clicks on <span> (x), close the modal
@@ -221,7 +223,6 @@
 
         // When the user clicks the button, open the modal
         btn.onclick = function() {
-          console.log("Click");
           modal.style.display = "block";
           document.body.style.overflowY = "hidden";
         }

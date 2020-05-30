@@ -25,6 +25,9 @@ function promptUser () {
     socket.emit("nameSet","")
     setCookie("name",getCookie("name"),30);
     putName();
+    if (getCookie("hasReported") == "true") {
+      document.getElementById("reportIssueButton").style.display = "none";
+    }
     return;
   }
   while (person == null) {
@@ -200,21 +203,20 @@ socket.on('clock',function(data){
   document.getElementById("gameTimer").innerHTML = "Timer: "+data.toFixed(2);
 });
 
-function collectProblem () {
-  //somehow get the problem here
-}
-
 document.getElementById("reportIssue").onclick = function () {
   document.getElementById("myModal2").style.display = "none";
   document.body.style.overflowY = "auto";
   if (document.getElementById("issue").value == "") {
     return;
   }
+  setCookie("hasReported","true",30);
+  document.getElementById("reportIssueButton").style.display = "none";
   let toPrint = currentProblemInfo.currentYear + " AIME " + currentProblemInfo.currentYearNumber + " Problem " + currentProblemInfo.currentProblem + ". User had following complaint: " + document.getElementById("issue").value;
   socket.emit('reportError',toPrint);
 }
 
 socket.on('waiting',function(data){
+setCookie("hasReported","false",30);
  document.getElementById("gameTimer").style = "color:black;";
  document.getElementById("questionStatement").innerHTML = "";
  document.getElementById("questionImg").src = "";
