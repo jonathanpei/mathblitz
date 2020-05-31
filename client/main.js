@@ -153,7 +153,7 @@ socket.on('message', function(text) {
   } else{
     var timeMins = ":"+d.getMinutes()+"]"; 
   }
-  var finMsg = timeHrs + timeMins + text;
+  var finMsg = timeHrs + timeMins + " " + text;
   var container = document.getElementById('chatBox');
   var newMessage = document.createElement('p');
   newMessage.innerText = finMsg;
