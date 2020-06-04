@@ -20,7 +20,6 @@ function randomName() {
 
 function promptUser() {
   let person = null;
-  alert("hello:");
   console.log(document.cookie);
   if (getCookie("name") != "") {
     socket.emit("nameSet","")
@@ -47,7 +46,6 @@ function promptUser() {
   location.reload();
 }
 window.onload = function(e){
-  alert("dslfj");
   promptUser();
 }
 function getCookie(cname) {
