@@ -13,7 +13,7 @@ function setCookie(cname,cvalue,exdays) {
 
 function randomName() {
   let names = ["porcupine","hedgehog","pineapple","chicken","horse","cabbage","watermelon","biswadev","dog","fish","elephant","rose","popcorn", "kitten", "CNCM Bot "];
-  let name = names[Math.floor(Math.random() * names.length())];
+  let name = names[Math.floor(Math.random() * 15)];
   let number = Math.ceil(Math.random() * 1000);
   return (name.concat(number.toString()));
 }
