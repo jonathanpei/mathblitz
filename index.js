@@ -259,7 +259,7 @@ function startProblem(roomName) {
     currentYearNumber = 0;
     currentProblem = Math.floor(Math.random() * (gameList[roomName + ""].hp - gameList[roomName + ""].ep + 1)) + gameList[roomName + ""].ep;
     gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + ""][currentProblem + ""]);
-    io.to(roomName).emit('console', currentYear + " Problem: " + currentProblem + " Answer: " + gameList[roomName + ""]["answer"]);
+    //io.to(roomName).emit('console', currentYear + " Problem: " + currentProblem + " Answer: " + gameList[roomName + ""]["answer"]);
 
     fs.readFile(__dirname + "/client/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/latex.txt", 'utf8', function (err, data) {
       if (err) {
@@ -322,7 +322,7 @@ function startProblem(roomName) {
     if (currentYearNumber == 1) gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + "_I"][currentProblem + ""]);
     if (currentYearNumber == 2) gameList[roomName + ""]["answer"] = parseInt(answers[currentYear + "_II"][currentProblem + ""]);
 
-    io.to(roomName).emit('console', currentYear + " " + currentYearNumber + " Problem: " + currentProblem + " Answer: " + gameList[roomName + ""]["answer"]);
+    //io.to(roomName).emit('console', currentYear + " " + currentYearNumber + " Problem: " + currentProblem + " Answer: " + gameList[roomName + ""]["answer"]);
 
     fs.readFile(__dirname + "/client/math-problems-master/AIME/" + currentYear + "/" + currentYearNumber + "/" + currentProblem + "/latex.txt", 'utf8', function (err, data) {
       if (err) {
