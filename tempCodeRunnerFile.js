@@ -1,1 +1,1 @@
-al
+      socket.emit("correctAnswer",0);

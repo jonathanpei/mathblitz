@@ -3,6 +3,9 @@ var currentYear = 0;
 var currentYearNumber = 0;
 var currentProblem = 0;
 var currentProblemInfo = 0;
+var colorChange;
+
+
 function setCookie(cname,cvalue,exdays) {
   var d = new Date();
   d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -139,6 +142,40 @@ $("#leave").click(function(){
 $("#submitAns").click(function(){
   socket.emit('submitAns',document.getElementById("ansBox").value);
   document.getElementById("ansBox").value="";
+});
+socket.on('correctAnswer', function(msg){
+  var counter = 0;
+  $("#ansBox").css("background","rgba(0,255,0,1)")
+  try{
+    clearInterval(colorChange);
+  }catch(err){
+  }
+  colorChange = setInterval(function(){
+    $("#ansBox").css("background","rgba(0,255,0,"+(1-1/250*counter)+")");
+    counter++;
+    if(counter>=250){
+      clearInterval(colorChange);
+      $("#ansBox").css("background","rgba(0,255,0,0)");
+
+    }
+  },1);
+});
+socket.on('incorrectAnswer', function(msg){
+  var counter = 0;
+  $("#ansBox").css("background","rgba(255,0,0,1)")
+  try{
+    clearInterval(colorChange);
+  }catch(err){
+  }
+  colorChange = setInterval(function(){
+    $("#ansBox").css("background","rgba(255,0,0,"+(1-1/250*counter)+")");
+    counter++;
+    if(counter>=250){
+      clearInterval(colorChange);
+      $("#ansBox").css("background","rgba(255,0,0,0)");
+
+    }
+  },1);
 });
 socket.on('message', function(text) {
   if (!text) {

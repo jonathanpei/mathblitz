@@ -264,6 +264,7 @@ input {
 
 .buttons {
   position: absolute;
+  z-index: -100;
   top: 23px;
   left: 100px;
   margin-left: 10%;
