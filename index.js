@@ -8,7 +8,8 @@ var server = http.Server(app);
 var nodemailer = require('nodemailer');
 var fs = require('fs');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
+const dotenv = require('dotenv');
+dotenv.config();
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
