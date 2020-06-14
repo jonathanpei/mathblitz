@@ -177,7 +177,11 @@ button {
   font-size: 16px;
   cursor: pointer;
 }*/
-
+#info{
+  color: #0a93f6;
+  background-color: #f2faff;
+  cursor: pointer;
+}
 #toggleGame{
   color: #0a93f6;
   background-color: #f2faff;

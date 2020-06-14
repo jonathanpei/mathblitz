@@ -38,8 +38,8 @@ var io = require('socket.io')(server);
 var gameNumber = 1;
 var gameList = {};
 var playerList = {};
-app.get('/login', function (req, res) {
-  res.sendFile(__dirname + "/client/index.html");
+app.get('/info', function (req, res) {
+  res.sendFile(__dirname + "/client/info.html");
 })
 function addGames(socket) {
 }
