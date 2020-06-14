@@ -287,7 +287,7 @@ function startProblem(roomName) {
       console.log(gameList[roomName + ""]["answer"]);
 
 
-      var mailOptions = {
+      /*var mailOptions = {
         from: process.env.emailAddress,
         to: process.env.emailAddress,
         subject: currentYear + " Problem: " + currentProblem,
@@ -299,7 +299,7 @@ function startProblem(roomName) {
         } else {
           console.log('Email sent: ' + info.response);
         }
-      });
+      });*/
     });
     var url = "https://raw.githubusercontent.com/RadiantCheddar/mathbowl/master/client/math-problems-master/AIME/" + currentYear + "/" + currentProblem + "/images/0.png";
     if (UrlExists(url)) {
@@ -349,7 +349,7 @@ function startProblem(roomName) {
       console.log(gameList[roomName + ""]["answer"]);
 
 
-      var mailOptions = {
+      /*var mailOptions = {
         from: process.env.emailAddress,
         to: process.env.emailAddress,
         subject: currentYear + " " + currentYearNumber + " Problem: " + currentProblem,
@@ -361,7 +361,7 @@ function startProblem(roomName) {
         } else {
           console.log('Email sent: ' + info.response);
         }
-      });
+      });*/
 
     });
 
