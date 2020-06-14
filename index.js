@@ -12,8 +12,8 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'aimecdrerrorreports@gmail.com',
-    pass: 'aimecdr12345'
+    user: process.env.emailAddress,
+    pass: process.env.emailPass
   }
 });
 
@@ -106,8 +106,8 @@ io.on('connection', function (socket) {
     if (playerList[socket.id + ""] === undefined) return;
     if (gameList[playerList[socket.id + ""].room] === undefined) return;
     var mailOptions = {
-      from: 'aimecdrerrorreports@gmail.com',
-      to: 'aimecdrerrorreports@gmail.com',
+      from: process.env.emailAddress,
+      to: process.env.emailAddress,
       subject: msg,
       text: msg
     };
@@ -287,8 +287,8 @@ function startProblem(roomName) {
 
 
       var mailOptions = {
-        from: 'aimecdrerrorreports@gmail.com',
-        to: 'aimecdrerrorreports@gmail.com',
+        from: process.env.emailAddress,
+        to: process.env.emailAddress,
         subject: currentYear + " Problem: " + currentProblem,
         text: problemStatement
       };
@@ -349,8 +349,8 @@ function startProblem(roomName) {
 
 
       var mailOptions = {
-        from: 'aimecdrerrorreports@gmail.com',
-        to: 'aimecdrerrorreports@gmail.com',
+        from: process.env.emailAddress,
+        to: process.env.emailAddress,
         subject: currentYear + " " + currentYearNumber + " Problem: " + currentProblem,
         text: problemStatement
       };
