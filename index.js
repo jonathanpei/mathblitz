@@ -397,6 +397,7 @@ function startProblem(roomName) {
       io.to(roomName).emit('clock', 0);
 
     }
+    if (!roomStillOpen(roomName)) return false;
     var numOfPlayers = gameList[roomName + ""].players.length;
     var peopleAnswered = 0;
     for (var i = 0; i < gameList[roomName + ""].players.length; i++) {
