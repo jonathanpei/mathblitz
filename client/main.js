@@ -130,6 +130,8 @@ $("#createGame").click(function(){
     gameType: document.getElementById("scoringType").value
 
   });
+  document.getElementById("reportIssueButton").style.display = "none";
+
 });
 $("#start").click(function(){
   socket.emit('start',0);
@@ -320,6 +322,8 @@ socket.on('showImage',function(data){
     document.getElementById("questionImg").src = data;
 });
 function joinGame(gameNum){
+  document.getElementById("reportIssueButton").style.display = "none";
+
   if(getCookie("inGame") == "true") {
     inGame();
     return;

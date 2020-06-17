@@ -41,7 +41,8 @@
     <div id="menu">
       Well, here you are, <span id="putNameHere"></span>. Here's what you can do:<br />
         <button style="float:right;" id="info" onclick="location.href='/info'"><p style = "padding-top:0px; padding-left:0px; font-size: 17px;">Info</p></button>
-      <button id="toggleGame" style="float:right;"><center><p style = "padding-top:0px; padding-left:0px; font-size: 17px;">Create Game</p></center></button>
+
+        <button id="toggleGame" style="float:right;"><center><p style = "padding-top:0px; padding-left:0px; font-size: 17px;">Create Game</p></center></button>
       <div class="content" id="gameForm">
       </div>
       <div id="myModal" class="modal">
@@ -111,6 +112,7 @@
         <button style="float:right" id="leave">Leave</button>
 
         <button style="float:right" id="start">Start</button>
+        <button class="btn danger" id="reportIssueButton" style="float:right; color:whitesmoke;">Report</button>
 
         <h3 style="float:right" id="gameTimer"></h3>
 
@@ -167,7 +169,7 @@
       <button id="send-button" type="submit">Chat</button>
     </form>
 
-        <div class="buttons" id="reportIssueButton" style="display: none;">
+        <!--<div class="buttons" id="reportIssueButton" style="display: none;">
           <button class="blob-btn">
             <img src="https://i.ya-webdesign.com/images/red-laser-blast-png-2.png" style="height: 20px; width: auto;"> Report Issue
             <span class="blob-btn__inner">
@@ -190,7 +192,7 @@
               </filter>
             </defs>
           </svg>
-        </div>
+        </div>-->
     <br /><br />
     <script src="main.js"></script>
     <script>
@@ -205,6 +207,7 @@
 
       // When the user clicks the button, open the modal
       btn.onclick = function() {
+        document.getElementById("issue").value = "";
         if (getCookie("hasReported") == "true") {
           return;
         }
