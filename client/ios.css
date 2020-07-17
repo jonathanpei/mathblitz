@@ -399,3 +399,10 @@ input {
             transform: translateZ(0) scale(1.4);
   }
 }
+#hurtsMyOCD {
+  padding-left: 10px;
+  padding-top: 10px;
+}
+.scoringMethods {
+  padding-left: 5px;
+}
