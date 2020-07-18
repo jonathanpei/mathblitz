@@ -41,6 +41,9 @@ var playerList = {};
 app.get('/info', function (req, res) {
   res.sendFile(__dirname + "/client/info.html");
 })
+app.get('/register', function (req, res) {
+  res.sendFile(__dirname + "/client/register.html");
+})
 function addGames(socket) {
 }
 

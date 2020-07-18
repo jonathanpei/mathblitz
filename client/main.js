@@ -15,10 +15,12 @@ function setCookie(cname,cvalue,exdays) {
 }
 
 function randomName() {
-  let names = ["porcupine","hedgehog","pineapple","chicken","horse","cabbage","watermelon","biswadev","dog","fish","elephant","rose","popcorn", "kitten", "CNCM Bot "];
+  let adjectives = ["big", "middle", "small", "phat", "gray", "aphasic", "punished", "purple", "analphabetic", "green", "redacted", "censored"];
+  let names = ["porcupine","hedgehog","pineapple","chicken","horse","cabbage","watermelon","biswadev","dog","fish","elephant","rose","popcorn", "kitten", "CNCM Bot ", "hacker", "lizard"];
   let name = names[Math.floor(Math.random() * names.length)];
+  let adj = adjectives[Math.floor(Math.random() * adjectives.length)];
   let number = Math.ceil(Math.random() * 1000);
-  return (name.concat(number.toString()));
+  return (adj.concat(name, number.toString()));
 }
 
 function promptUser() {
