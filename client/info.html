@@ -12,26 +12,25 @@
 </head>
 
 <body>
+  <button onclick="window.history.back()">Back</button>
   <h1> Creating A Game</h1>
-  <ol>
+  <ul>
     <li><p><b>Game Name:</b> This will be how your game appears to other people in the lobby.</p></li>    
     <li><p><b>Time Limit:</b> The amount of seconds there will be to answer</p></li>
     <li><p><b>Problems:</b> The number of problems the game will consist of. </p></li>  
-    <li><p><b>Easiest Problem:</b> The easiest problem in the game will never go below this number on an aime.</p></li>
+    <li><p><b>Easiest Problem:</b> The easiest problem in the game will never go below this number on an AIME.</p></li>
     <li><p><b>Hardest Problem:</b> Similar to "Easiest Problem" but for the hardest one</p></li>
     <li><p><b>Maximum Correct Answers:</b> After this amount of people answer correctly, the question will skip. For example, setting this to 1 will only allow one person to earn points for that round.</p></li>
-    <li><h4>Scoring Methods</h4></li>
+    <li><h3 id="hurtsMyOCD">Scoring Methods</h4></li>
     <li>
         <ul>
-            <li><p><b>Correct Answer:</b> Anyone who answers correctly will earn a point.</p></li>
-            <li><p><b>Rank:</b> The order in which you answer correctly, affects how many points you earn for the round.</p></li>
-            <li><p><b>Timed: </b> You will earn points based on how quickly you answer.</p></li>
+            <li class="scoringMethods"><p><b>Correct Answer:</b> Anyone who answers correctly will earn a point.</p></li>
+            <li class="scoringMethods"><p><b>Rank:</b> The order in which you answer correctly affects how many points you earn for the round.</p></li>
+            <li class="scoringMethods"><p><b>Timed: </b> You will earn points based on how quickly you answer.</p></li>
 
         </ul>
     </li>
-
-    
-</ol>
+</ul>
 <h1> General Information</h1>
 <p> People can answer multiple times. Whenever you answer correctly or incorrectly, the input bar will glow green or red respectively. </p>
 <br/>
