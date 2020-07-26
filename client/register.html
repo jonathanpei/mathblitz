@@ -47,7 +47,7 @@
           <button id="toggleSignin" style="float:right;"><center><p style = "font-size: 17px; text-align: center;">Sign In</p></center></button>
         </tr>
       </table>
-      <div id="myModal" class="modal">
+      <div id="registerModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content" id="accountOptions">
           <span class="close">&times;</span><br /><br />
@@ -97,40 +97,10 @@
       $("#universalNames").append(<p class="labeller">Users online:</p>);-->
 
     
-    <script src="main.js"></script>
-    <script>
-      // Get the modal
-      var modal = document.getElementById("myModal");
-
-      // Get the button that opens the modal
-      var btn = document.getElementById("toggleAccount");
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close")[0];
-
-      // When the user clicks the button, open the modal
-      btn.onclick = function() {
-        modal.style.display = "block";
-        document.body.style.overflowY = "hidden";
-      }
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function() {
-        modal.style.display = "none";
-        document.body.style.overflowY = "auto";
-      }
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function(event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-          document.body.style.overflowY = "auto";
-        }
-      }
-    </script>
+    
     <script>
     // Get the modal
-    var modal = document.getElementById("signInModal");
+    var modalSign = document.getElementById("signInModal");
 
     // Get the button that opens the modal
     var btn = document.getElementById("toggleSignin");
@@ -140,23 +110,53 @@
 
     // When the user clicks the button, open the modal
     btn.onclick = function() {
-      modal.style.display = "block";
+      modalSign.style.display = "block";
       document.body.style.overflowY = "hidden";
     }
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
-      modal.style.display = "none";
+      modalSign.style.display = "none";
       document.body.style.overflowY = "auto";
     }
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
+      if (event.target == modalSign) {
+        modalSign.style.display = "none";
         document.body.style.overflowY = "auto";
       }
     }
+
+
+    // Get the modal
+    var modalReg = document.getElementById("registerModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("toggleAccount");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modalReg.style.display = "block";
+  document.body.style.overflowY = "hidden";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modalReg.style.display = "none";
+  document.body.style.overflowY = "auto";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modalReg) {
+    modalReg.style.display = "none";
+    document.body.style.overflowY = "auto";
+  }
+}
     </script>
 </body>
 
