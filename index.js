@@ -98,6 +98,7 @@ io.on('connection', function (socket) {
 
   });
   socket.on('message', function (msg) {
+    console.log(msg);
     var rooms = Object.keys(socket.rooms).filter(item => item != socket.id);
     io.to(rooms[0]).emit('message', msg);
 
