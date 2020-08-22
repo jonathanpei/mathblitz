@@ -10,14 +10,15 @@ var fs = require('fs');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const dotenv = require('dotenv');
 dotenv.config();
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
+transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, 
   auth: {
-    user: process.env.emailAddress,
-    pass: process.env.emailPass
+      user: process.env.emailAddress, 
+      pass: process.env.emailPass
   }
 });
-
 
 
 app.use(express.static('client'));
