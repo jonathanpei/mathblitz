@@ -95,8 +95,10 @@ $("#createGame").click(function(){
     inGame();
     return;
   }
-  if(document.getElementById("gameTimeLimit").value<1 || document.getElementById("gameTimeLimit").value>600) document.getElementById("gameTimeLimit").value = 60;
-  if(document.getElementById("gameProblems").value<1 || document.getElementById("gameProblems").value>50) document.getElementById("gameProblems").value = 10;
+  if(document.getElementById("gameTimeLimit").value>600) document.getElementById("gameTimeLimit").value = 600;
+  if(document.getElementById("gameTimeLimit").value<1) document.getElementById("gameTimeLimit").value = 60;
+  if(document.getElementById("gameProblems").value<1) document.getElementById("gameProblems").value = 10;
+  if(document.getElementById("gameProblems").value>50) document.getElementById("gameProblems").value = 50;
 
   if(easiestProblem<1 || easiestProblem.value>15) {
     console.log("issue 1");

@@ -70,7 +70,8 @@ io.on('connection', function (socket) {
   socket.on('newGame', function (msg) {
     if (msg.timeLimit > 600) msg.timeLimit = 600;
     if (msg.timeLimit < 1) msg.timeLimit = 60;
-    if (msg.problems < 1 || msg.problems > 50) msg.problems = 10;
+    if (msg.problems > 50) msg.problems = 50;
+    if (msg.problems < 1) msg.problems = 10;
 
 
     if (msg.ep < 1 || msg.ep > 15) msg.ep = 1;
