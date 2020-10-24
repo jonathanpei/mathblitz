@@ -290,8 +290,8 @@ function startProblem(roomName) {
       io.to(roomName).emit('showProblem', problemStatement);
       io.to(roomName).emit('currentProblemInfo',{currentYear:currentYear,currentYearNumber:currentYearNumber,currentProblem,currentProblem});
 
-      console.log(currentYear + " Problem: " + currentProblem);
-      console.log(gameList[roomName + ""]["answer"]);
+      //console.log(currentYear + " Problem: " + currentProblem);
+      //console.log(gameList[roomName + ""]["answer"]);
 
 
       /*var mailOptions = {
@@ -352,8 +352,8 @@ function startProblem(roomName) {
       
       io.to(roomName).emit('showProblem', problemStatement);
       io.to(roomName).emit('currentProblemInfo',{currentYear:currentYear,currentYearNumber:currentYearNumber,currentProblem,currentProblem});
-      console.log(currentYear + " " + currentYearNumber + " Problem: " + currentProblem);
-      console.log(gameList[roomName + ""]["answer"]);
+      //console.log(currentYear + " " + currentYearNumber + " Problem: " + currentProblem);
+      //console.log(gameList[roomName + ""]["answer"]);
 
 
       /*var mailOptions = {
