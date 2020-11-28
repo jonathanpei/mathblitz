@@ -1,5 +1,5 @@
-# Math Blitz
-You can play a countdown round with AIME problems at <a href="https://mathblitz.herokuapp.com"> Math Blitz</a> .
+# General Information
+<a href="https://mathblitz.herokuapp.com"> Math Blitz</a> is a <a href="https://en.wikipedia.org/wiki/Mathcounts#Countdown_Round"> countdown round</a> style game except with problems taken from the AIME. This allows for head to head competition with more difficult problems. 
 # Creating A Game
 The following options will be available when creating a game.
 - Game Name: This will be how your game appears to other people in the lobby.
