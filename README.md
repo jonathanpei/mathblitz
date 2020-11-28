@@ -21,6 +21,6 @@ The following options will be available when creating a game.
 
   - Timed: You will earn points based on how quickly you answer.
  
- #Gameplay
+ # Gameplay
  
  Players are allowed to answer multiple times. When the input box glows <span style="color:green">green</span>, you answered correctly and if it glows <span style="color:red">red</span>, you answered incorrectly.
