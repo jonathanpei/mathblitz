@@ -178,7 +178,6 @@ io.on('connection', function (socket) {
 
       var rooms = Object.keys(socket.rooms).filter(item => item != socket.id);
       socket.leave(currentRoom);
-
       if (currentRoom != "menu") {
         if (gameList[currentRoom + ""] !== undefined) {
 

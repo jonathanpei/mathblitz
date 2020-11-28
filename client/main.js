@@ -225,6 +225,9 @@ socket.on('message', function(text) {
 window.onbeforeunload = function(e) {
     setCookie("inGame","false",30);
 };
+window.onunload = function(e) {
+  setCookie("inGame","false",30);
+};
 socket.on('addGames',function(data){
   $("#games").empty();
   $("#games").append("<p class='labeller'>Games in progress:</p>");
