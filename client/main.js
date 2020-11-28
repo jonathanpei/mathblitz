@@ -208,7 +208,7 @@ socket.on('message', function(text) {
   container.appendChild(seperator);
 
   container.scrollTop = container.scrollHeight;
-  /* KaTeX renditioning of LaTeX in the chat box
+  // KaTeX renditioning of LaTeX in the chat box
   renderMathInElement(document.getElementById("chatBox"),
       {
         delimiters: [
@@ -220,7 +220,7 @@ socket.on('message', function(text) {
             {left: "[inline]", right: "[/inline]", display: false},
             {left: "\\(", right: "\\)", display: false},
         ]
-      });*/
+      });
 });
 window.onbeforeunload = function(e) {
     setCookie("inGame","false",30);
@@ -292,7 +292,7 @@ setCookie("hasReported","false",30);
  document.getElementById("reportIssueButton").style.display = "none";
   document.getElementById("gameTimer").innerHTML = "The Next Problem Will Start Soon";
 });
-/* For switching to KaTeX for problem statements as well
+// For switching to KaTeX for problem statements as well
 document.addEventListener("DOMContentLoaded", function() {
   renderMathInElement(document.getElementById("questionStatement"),
       {
@@ -306,13 +306,13 @@ document.addEventListener("DOMContentLoaded", function() {
             {left: "\\(", right: "\\)", display: false},
         ]
       });
-});*/
+});
 
 socket.on('showProblem',function(data){
   document.getElementById("questionStatement").innerHTML = data;
   document.getElementById("reportIssueButton").style.display = "inline-block";
-  MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("questionStatement")]); //Current MathJax rendition of problems
-  /* For switching to KaTeX for problem statements as well
+  //MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("questionStatement")]); //Current MathJax rendition of problems
+  // For switching to KaTeX for problem statements as well
   renderMathInElement(document.getElementById("questionStatement"),
       {
         delimiters: [
@@ -324,7 +324,7 @@ socket.on('showProblem',function(data){
             {left: "[inline]", right: "[/inline]", display: false},
             {left: "\\(", right: "\\)", display: false},
         ]
-      });*/
+      });
 });
 socket.on('showImage',function(data){
     document.getElementById("questionImg").src = data;
