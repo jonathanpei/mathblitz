@@ -87,7 +87,7 @@ io.on('connection', function (socket) {
     }
 
     console.log(msg);
-    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, ep: parseInt(msg.ep), hp: parseInt(msg.hp), answeringPhase: false, currentProblem: 0, started: false, ca: msg.ca, gameType: msg.gameType, time: 0 };
+    gameList[gameNumber + ""] = { name: msg.name, timeLimit: msg.timeLimit, problems: msg.problems, ep: parseInt(msg.ep), hp: parseInt(msg.hp), answeringPhase: false, currentProblem: 0, started: false, ca: msg.ca, gameType: msg.gameType, time: 0,problemNames:[] };
     console.log(gameList);
     io.emit('addGames', gameList);
     socket.emit('joinedGame', 0);
@@ -287,7 +287,8 @@ function startProblem(roomName) {
       problemStatement = problemStatement.split(">").join(" > ");
 
       io.to(roomName).emit('showProblem', problemStatement);
-      io.to(roomName).emit('currentProblemInfo',{currentYear:currentYear,currentYearNumber:currentYearNumber,currentProblem,currentProblem});
+      io.to(roomName).emit('currentProblemInfo',{currentYear:currentYear,currentYearNumber:currentYearNumber,currentProblem:currentProblem,problemNumber:gameList[roomName + ""].currentProblem});
+      gameList[roomName + ""].problemNames.push(currentYear +" AIME "+ " #"+currentProblem);
 
       //console.log(currentYear + " Problem: " + currentProblem);
       //console.log(gameList[roomName + ""]["answer"]);
@@ -350,7 +351,9 @@ function startProblem(roomName) {
       problemStatement = problemStatement.split(">").join(" > ");
       
       io.to(roomName).emit('showProblem', problemStatement);
-      io.to(roomName).emit('currentProblemInfo',{currentYear:currentYear,currentYearNumber:currentYearNumber,currentProblem,currentProblem});
+      io.to(roomName).emit('currentProblemInfo',{currentYear:currentYear,currentYearNumber:currentYearNumber,currentProblem:currentProblem, problemNumber:gameList[roomName + ""].currentProblem});
+      gameList[roomName + ""].problemNames.push(currentYear +" AIME "+currentYearNumber+ " #"+currentProblem);
+
       //console.log(currentYear + " " + currentYearNumber + " Problem: " + currentProblem);
       //console.log(gameList[roomName + ""]["answer"]);
 
@@ -433,7 +436,7 @@ function waitProblem(roomName) {
   if (!roomStillOpen(roomName)) return false;
 
   if (gameList[roomName + ""].currentProblem >= gameList[roomName + ""].problems) {
-    io.to(roomName).emit("gameOver", gameList[roomName + ""].players);
+    io.to(roomName).emit("gameOver", gameList[roomName + ""].problemNames);
     return;
   }
   else {

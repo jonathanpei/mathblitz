@@ -244,6 +244,7 @@ socket.on('addGames',function(data){
   }
 });
 socket.on('currentProblemInfo',function(data){
+  document.getElementById("questionLabel").innerHTML = "Question: "+data.problemNumber;
   currentProblemInfo=data;
 })
 socket.on('playerList',function(data){
@@ -360,6 +361,15 @@ socket.on('leaveRoom',function(data){
 })
 socket.on('gameOver',function(data){
   document.getElementById("questionStatement").innerHTML = "Game Over";
+  var problemList = document.createElement("OL");
+  document.getElementById("questionStatement").appendChild(problemList);
+  for(var i = 0; i<data.length; i++){
+    var y = document.createElement("LI");
+    var t = document.createTextNode(data[i]);
+    y.appendChild(t);
+    problemList.appendChild(y);
+  }
+
   document.getElementById("questionImg").src = "";
   document.getElementById("gameTimer").innerHTML = "";
 
