@@ -286,11 +286,12 @@ document.getElementById("reportIssue").onclick = function () {
 
 socket.on('waiting',function(data){
 setCookie("hasReported","false",30);
- document.getElementById("gameTimer").style = "color:black;";
- document.getElementById("questionStatement").innerHTML = "";
- document.getElementById("questionImg").src = "";
- document.getElementById("reportIssueButton").style.display = "none";
+  document.getElementById("gameTimer").style = "color:black;";
+  document.getElementById("questionStatement").innerHTML = "";
+  document.getElementById("questionImg").src = "";
+  document.getElementById("reportIssueButton").style.display = "none";
   document.getElementById("gameTimer").innerHTML = "The Next Problem Will Start Soon";
+  document.getElementById("ansForm").style.display = "none";
 });
 // For switching to KaTeX for problem statements as well
 document.addEventListener("DOMContentLoaded", function() {
@@ -311,6 +312,7 @@ document.addEventListener("DOMContentLoaded", function() {
 socket.on('showProblem',function(data){
   document.getElementById("questionStatement").innerHTML = data;
   document.getElementById("reportIssueButton").style.display = "inline-block";
+  document.getElementById("ansForm").style.display = "flex";
   //MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("questionStatement")]); //Current MathJax rendition of problems
   // For switching to KaTeX for problem statements as well
   renderMathInElement(document.getElementById("questionStatement"),
@@ -345,7 +347,7 @@ function inGame() {
   return;
 }
 
-socket.on('joinedGame',function(data){
+socket.on('joinedGame', function(data){
   hideMenu();
   showGame();
   document.getElementById("gameTimer").innerHTML = "";
@@ -381,7 +383,7 @@ function hideMenu(){
 }
 function showGame(){
   $("#game").show();
-
+  document.getElementById("ansForm").style.display = "none";
 }
 function showMenu(){
   $("#menu").show();

@@ -76,7 +76,7 @@ io.on('connection', function (socket) {
 
     if (msg.ep < 1 || msg.ep > 15) msg.ep = 1;
     if (msg.hp < 1 || msg.hp > 15) msg.hp = 15;
-    if (msg.hp < msg.ep) { msg.ep = 1; msg.hp = 15 };
+    if (msg.hp < msg.ep) { a = msg.ep; msg.ep = msg.hp; msg.hp = a;};
     if (msg.ca < 1 || msg.ca > 50) msg.ca = 50;
     if (msg.name.trim() == "") {
       msg.name = curName + "'s Game";
