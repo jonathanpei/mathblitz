@@ -83,7 +83,16 @@ form.addEventListener('submit', function(e) {
     return;
   }
   var userName = getCookie("name");
-  text = "<b>"+userName + "</b>: " + text;
+  if (text == '/replay'){
+    var lastGame = getCookie("lastGame");
+    a(lastGame.EP,lastGame.HP,lastGame.TL,lastGame.GP,lastGame.CA,lastGame.ST);
+  }
+  else if (text.startsWith('/me ')){
+    text = ' * ' + userName + text.slice(3);
+  }
+  else{
+    text = "<b>"+userName + "</b>: " + text;
+  }
   socket.emit('message', text);
   input.value = '';
 });
@@ -110,18 +119,30 @@ $("#createGame").click(function(){
   }
   if(hardestProblem<easiestProblem) {
     console.log("issue 3");
-    document.getElementById("ep").value = 1; 
-    document.getElementById("hp").value = 15;
+    var a = document.getElementById("ep");
+    document.getElementById("ep").value = document.getElementById("hp").value; 
+    document.getElementById("hp").value = a;
   }
   if(parseInt(document.getElementById("correctAnswers").value)<1 || parseInt(document.getElementById("correctAnswers").value)>50) {
     document.getElementById("correctAnswers").value = 50;
   }
-
   if(document.getElementById("scoringType").value.trim()!="ranking" && document.getElementById("scoringType").value.trim()!="timing" && document.getElementById("scoringType").value.trim()!="correctAnswer") {
     document.getElementById("scoringType").value= "correctAnswer";
   }
+  makeGame(document.getElementById("ep"),document.getElementById("hp"),document.getElementById("gameTimeLimit"),document.getElementById("gameProblems"),document.getElementById("correctAnswers"),document.getElementById("scoringType"));
+});
+function makeGame(EP,HP,TL,GP,CA,ST){
+  
   document.getElementById("start").style.display = "inline-block";
   setCookie("inGame","true",30);
+  setCookie("lastGame", {
+    "TL": document.getElementById("gameTimeLimit").value,
+    "GP": document.getElementById("gameProblems").value,
+    "EP": document.getElementById("ep"),
+    "HP": document.getElementById("hp"),
+    "CA": document.getElementById("correctAnswers").value,
+    "ST": document.getElementById("scoringType")
+  });
   easiestProblem = parseInt(document.getElementById("ep").value);
   hardestProblem = parseInt(document.getElementById("hp").value);
   socket.emit('newGame',{
@@ -135,8 +156,7 @@ $("#createGame").click(function(){
 
   });
   document.getElementById("reportIssueButton").style.display = "none";
-
-});
+};
 $("#start").click(function(){
   socket.emit('start',0);
   document.getElementById("start").style.display = "none";

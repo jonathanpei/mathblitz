@@ -214,6 +214,7 @@ io.on('connection', function (socket) {
         if (gameList[playerList[socket.id + ""].room].players[i].id == socket.id && gameList[playerList[socket.id + ""].room].players[i].answered == false) {
           if (gameList[playerList[socket.id + ""].room].gameType == "timing") {
             gameList[playerList[socket.id + ""].room].players[i].score += gameList[playerList[socket.id + ""].room].timeLimit - gameList[playerList[socket.id + ""].room].time;
+            gameList[playerList[socket.id + ""].room].players[i].score = Math.round(gameList[playerList[socket.id + ""].room].players[i].score * 100) / 100;
           }
           else if (gameList[playerList[socket.id + ""].room].gameType == "ranking") {
             var numOfPlayers =gameList[playerList[socket.id + ""].room].players.length;
