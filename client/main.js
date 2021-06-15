@@ -50,7 +50,7 @@ function promptUser() {
   location.reload();
 }
 window.onload = function(e){
-  if (getCookie("rating") == ""){
+  if (getCookie("rating") == "" || getCookie("rating") == null || isNaN(getCookie("rating")) || getCookie("rating").includes("NaN") || getCookie("rating") == undefined){
     setCookie("rating", 1200, 30);
   }
   else{
