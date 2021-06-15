@@ -5,7 +5,6 @@ var currentProblem = 0;
 var currentProblemInfo = 0;
 var colorChange;
 
-
 function setCookie(cname,cvalue,exdays) {
   var d = new Date();
   d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -41,7 +40,7 @@ function promptUser() {
       person = person.replace(/\s/g,'');
     }
     if (person != null) {
-      if (person.includes(';') || person == "") {
+      if (person.includes(';') || person == "" || person.length > 25) {
         person = null;
       }
     }
@@ -51,6 +50,12 @@ function promptUser() {
   location.reload();
 }
 window.onload = function(e){
+  if (getCookie("rating") == ""){
+    setCookie("rating", 1200, 30);
+  }
+  else{
+    setCookie("rating", getCookie("rating"), 30);
+  }
   promptUser();
 }
 function getCookie(cname) {
@@ -83,11 +88,7 @@ form.addEventListener('submit', function(e) {
     return;
   }
   var userName = getCookie("name");
-  if (text == '/replay'){
-    var lastGame = getCookie("lastGame");
-    a(lastGame.EP,lastGame.HP,lastGame.TL,lastGame.GP,lastGame.CA,lastGame.ST);
-  }
-  else if (text.startsWith('/me ')){
+  if (text.startsWith('/me ')){
     text = ' * ' + userName + text.slice(3);
   }
   else{
@@ -174,7 +175,8 @@ socket.on('correctAnswer', function(msg){
   $("#ansBox").css("background","rgba(0,255,0,1)")
   try{
     clearInterval(colorChange);
-  }catch(err){
+  }
+  catch(err){
   }
   colorChange = setInterval(function(){
     $("#ansBox").css("background","rgba(0,255,0,"+(1-1/250*counter)+")");
@@ -280,7 +282,7 @@ socket.on('universalPlayerList',function(data){
   $("#universalNames").append("<p class='labeller'>Users online:</p>");
   for(var key in data){
     if(data.hasOwnProperty(key) && data[key+""].room=="menu"){
-      $("#universalNames").append("<p><b>"+data[key+""].name+"</b></p>");
+      $("#universalNames").append("<p><b>"+data[key+""].name+"</b>&nbsp; &nbsp; &nbsp; " + Math.round(data[key + ""].rating) + "</p>");
     }
   }
 });
@@ -351,6 +353,11 @@ socket.on('showProblem',function(data){
 socket.on('showImage',function(data){
     document.getElementById("questionImg").src = data;
 });
+socket.on('setCookie', function(cookielmao){
+  document.cookie = cookielmao;
+})
+
+
 function joinGame(gameNum){
   document.getElementById("reportIssueButton").style.display = "none";
 
@@ -359,7 +366,7 @@ function joinGame(gameNum){
     return;
   }
   setCookie("inGame","true",30);
-  socket.emit('joinGame',gameNum);
+  socket.emit('joinGame',[gameNum, getCookie('rating')]);
 }
 
 function inGame() {
@@ -367,7 +374,7 @@ function inGame() {
   return;
 }
 
-socket.on('joinedGame', function(data){
+socket.on('joinedGame', function(data){//joinedgame
   hideMenu();
   showGame();
   document.getElementById("gameTimer").innerHTML = "";
@@ -385,17 +392,16 @@ socket.on('gameOver',function(data){
   document.getElementById("questionStatement").innerHTML = "Game Over";
   var problemList = document.createElement("OL");
   document.getElementById("questionStatement").appendChild(problemList);
-  for(var i = 0; i<data.length; i++){
+  for(var i = 0; i<data.problemNames.length; i++){
     var y = document.createElement("LI");
-    var t = document.createTextNode(data[i]);
+    var t = document.createTextNode(data.problemNames[i]);
     y.appendChild(t);
     problemList.appendChild(y);
   }
 
   document.getElementById("questionImg").src = "";
   document.getElementById("gameTimer").innerHTML = "";
-
-
+  socket.emit('changeRating', data);
 });
 
 function hideMenu(){
@@ -426,7 +432,3 @@ socket.on('noImgSetup',function(data){
   document.getElementById("img").style.width = "0%";
   document.getElementById("img").style.display = "none";
 })
-
-socket.on("console",function(msg){
-  console.log(msg);
-});

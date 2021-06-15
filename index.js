@@ -20,7 +20,6 @@ transporter = nodemailer.createTransport({
   }
 });
 
-
 app.use(express.static('client'));
 app.use(cookieParser());
 server.listen(PORT, function () {
@@ -35,7 +34,7 @@ fs.readFile(__dirname + "/client/answers.txt", 'utf8', function (err, data) {
 });
 var io = require('socket.io')(server);
 
-
+console.log('hello?');
 var gameNumber = 1;
 var gameList = {};
 var playerList = {};
@@ -51,16 +50,16 @@ function addGames(socket) {
 io.on('connection', function (socket) {
   var cookies;
   var curName = "placeholder";
-
+  var crating = 1200;
+  console.log('test1');
   socket.join("menu");
   socket.on('nameSet', function (msg) {
     cookies = cookie.parse(socket.handshake.headers.cookie + "");
     curName = cookies.name;
-    playerList[socket.id + ""] = { name: curName, room: "menu" };
+    crating = cookies.rating;
+    playerList[socket.id + ""] = { name: curName, room: "menu" , rating: crating};
     io.emit('universalPlayerList', playerList);
-
   });
-
   io.emit('universalPlayerList', playerList);
 
   io.emit('addGames', gameList);
@@ -94,9 +93,9 @@ io.on('connection', function (socket) {
 
     socket.leave("menu");
     socket.join(gameNumber);
-    playerList[socket.id + ""] = { name: curName, room: gameNumber + "" };
+    playerList[socket.id + ""] = { name: curName, room: gameNumber + "" , rating: crating};
 
-    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: curName, answered: false, score: 0 }];
+    gameList[gameNumber + ""]["players"] = [{ id: socket.id, name: curName, answered: false, score: 0 , rating: cookie.parse(socket.handshake.headers.cookie + "").rating}];
     io.to(gameNumber + "").emit('playerList', gameList[gameNumber + ""]["players"]);
 
     gameNumber++;
@@ -127,15 +126,15 @@ io.on('connection', function (socket) {
       }
     });
   });
-  socket.on('joinGame', function (msg) {
+  socket.on('joinGame', function (msg) {//joingame
     socket.emit('joinedGame', 0);
     socket.leave("menu");
-    socket.join(msg);
-    gameList[msg + ""]["players"].push({ id: socket.id, name: curName, answered: false, score: 0 });
+    socket.join(msg[0]);
+    gameList[msg[0] + ""]["players"].push({ id: socket.id, name: curName, answered: false, score: 0, rating: msg[1] });
 
-    playerList[socket.id + ""] = { name: curName, room: msg + "" };
+    playerList[socket.id + ""] = { name: curName, room: msg[0] + "" , rating: crating};
 
-    io.to(msg).emit('playerList', gameList[msg + ""]["players"]);
+    io.to(msg[0]).emit('playerList', gameList[msg[0] + ""]["players"]);
     io.emit('universalPlayerList', playerList);
   });
   socket.on('leaveRoom', function (msg) {
@@ -204,6 +203,28 @@ io.on('connection', function (socket) {
     io.emit('addGames', gameList);
 
   });
+  socket.on('changeRating', function(data){
+    console.log('changing rating lmao');
+    var scoretotal = 0;
+    var denom = 0;
+    var pscore;
+    for (var i = 0; i < data.players.length; i++){
+      scoretotal += data.players[i].score;
+      denom += Math.pow(10, (data.players[i].score/400));
+      if (data.players[i].id == socket.id){
+        pscore = data.players[i].score;
+      }
+    }
+    var escore = Math.pow(10, (pscore/400)) * scoretotal / denom;
+    var ratingChange = 30 * (pscore - escore)/scoretotal;
+    var nRating = parseFloat(cookie.parse(socket.handshake.headers.cookie + "").rating) + ratingChange;
+    console.log(pscore);
+    console.log(scoretotal);
+    console.log(denom);
+    console.log(escore);
+    socket.emit('setCookie', "rating=" + nRating + ";2592000;path=/")
+  });
+  
   socket.on('submitAns', function (msg) {
     if (playerList[socket.id + ""] === undefined) return;
     if (gameList[playerList[socket.id + ""].room] === undefined) return;
@@ -435,9 +456,11 @@ function startProblem(roomName) {
 }
 function waitProblem(roomName) {
   if (!roomStillOpen(roomName)) return false;
-
+  console.log('test2');
   if (gameList[roomName + ""].currentProblem >= gameList[roomName + ""].problems) {
-    io.to(roomName).emit("gameOver", gameList[roomName + ""].problemNames);
+    console.log('test3');
+    io.to(roomName).emit("gameOver", gameList[roomName + ""]);
+    console.log(gameList[roomName + '']);
     return;
   }
   else {
